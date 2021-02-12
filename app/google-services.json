@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1090859062327",
+    "project_id": "playludo-35d49",
+    "storage_bucket": "playludo-35d49.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090859062327:android:81af17ccb698fbb78c1bb2",
+        "android_client_info": {
+          "package_name": "com.example.playludo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1090859062327-fdsc9oaph2uabukoq52r3ogu6p13ieso.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9KxwxMJgOS9k6-MUn5vWkT8PkHSLAhY4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1090859062327-fdsc9oaph2uabukoq52r3ogu6p13ieso.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
