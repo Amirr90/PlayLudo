@@ -7,7 +7,58 @@
 
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.example.playludo.DashboardFragment"
+        android:name="com.example.playludo.fragments.DashboardFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/action_dashboardFragment_to_bidDetailsFragment"
+            app:destination="@id/bidDetailsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_addCreditsFragment"
+            app:destination="@id/addCreditsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_submitNewBidFragment"
+            app:destination="@id/submitNewBidFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/bidDetailsFragment"
+        android:name="com.example.playludo.fragments.BidDetailsFragment"
+        android:label="fragment_bid_details"
+        tools:layout="@layout/fragment_bid_details" />
+    <fragment
+        android:id="@+id/addCreditsFragment"
+        android:name="com.example.playludo.AddCreditsFragment"
+        android:label="fragment_add_credits"
+        tools:layout="@layout/fragment_add_credits" >
+        <action
+            android:id="@+id/action_addCreditsFragment_to_addedSuccesssfullyFragment"
+            app:destination="@id/addedSuccesssfullyFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/dashboardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/submitNewBidFragment"
+        android:name="com.example.playludo.SubmitNewBidFragment"
+        android:label="fragment_submit_new_bid"
+        tools:layout="@layout/fragment_submit_new_bid" />
+    <fragment
+        android:id="@+id/addedSuccesssfullyFragment"
+        android:name="com.example.playludo.AddedSuccesssfullyFragment"
+        android:label="fragment_added_successsfully"
+        tools:layout="@layout/fragment_added_successsfully" />
 </navigation>
