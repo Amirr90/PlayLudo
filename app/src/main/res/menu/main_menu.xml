@@ -3,9 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/wallet"
         android:icon="@drawable/ic_baseline_account_balance_wallet_24"
         android:title="Wallet"
-        android:id="@+id/wallet"
         app:actionLayout="@layout/cart_item"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/setting"
+        android:icon="@drawable/ic_baseline_account_balance_wallet_24"
+        android:title="My Bids"
+        app:showAsAction="never" />
 </menu>

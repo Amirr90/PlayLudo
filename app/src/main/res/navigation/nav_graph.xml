@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/dashboardFragment">
+    app:startDestination="@id/appDashboardFragment">
 
     <fragment
         android:id="@+id/dashboardFragment"
@@ -41,7 +41,7 @@
         android:id="@+id/addCreditsFragment"
         android:name="com.example.playludo.AddCreditsFragment"
         android:label="fragment_add_credits"
-        tools:layout="@layout/fragment_add_credits" >
+        tools:layout="@layout/fragment_add_credits">
         <action
             android:id="@+id/action_addCreditsFragment_to_addedSuccesssfullyFragment"
             app:destination="@id/addedSuccesssfullyFragment"
@@ -61,4 +61,16 @@
         android:name="com.example.playludo.AddedSuccesssfullyFragment"
         android:label="fragment_added_successsfully"
         tools:layout="@layout/fragment_added_successsfully" />
+    <fragment
+        android:id="@+id/appDashboardFragment"
+        android:name="com.example.playludo.AppDashboardFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_app_dashboard">
+        <action
+            android:id="@+id/action_appDashboardFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in" />
+    </fragment>
 </navigation>
