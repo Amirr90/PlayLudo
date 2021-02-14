@@ -3,4 +3,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="earned">Total Earned</string>
+    <string name="game_name">Game name</string>
+    <string name="game_id">Game Id</string>
+    <string name="biding_time">Biding Time</string>
+    <string name="bid_status">BID Status</string>
+    <string name="bidder_name">Bidder Name</string>
+    <string name="accept">Accept</string>
+    <string name="bid_amount">Bid Amount</string>
+    <string name="accept_bid">Accept Bid</string>
 </resources>

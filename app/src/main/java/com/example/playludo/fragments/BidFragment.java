@@ -105,6 +105,6 @@ public class BidFragment extends Fragment implements AdapterInterface {
         BidModel bidModel = (BidModel) obj;
         Bundle bundle = new Bundle();
         bundle.putString(BID_ID, bidModel.getBidId());
-        HomeScreen.getInstance().navigate(R.id.action_dashboardFragment_to_bidDetailsFragment);
+        HomeScreen.getInstance().navigate(R.id.action_dashboardFragment_to_bidDetailsFragment, bundle);
     }
 }

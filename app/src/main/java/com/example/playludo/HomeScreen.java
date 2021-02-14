@@ -58,10 +58,10 @@ public class HomeScreen extends AppCompatActivity implements PaymentResultWithDa
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-        cart = menu.findItem(R.id.wallet);
+        cart = menu.findItem(R.id.notification);
         View actionView = cart.getActionView();
-        cartTv = actionView.findViewById(R.id.tvCartCount);
-        cartTv.setText(String.valueOf(cartCounter));
+        /*cartTv = actionView.findViewById(R.id.tvCartCount);
+        cartTv.setText(String.valueOf(cartCounter));*/
         actionView.setOnClickListener(v -> onOptionsItemSelected(cart));
         return true;
     }

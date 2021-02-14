@@ -7,6 +7,78 @@ public class BidModel {
     boolean bidStatus;
     long timestamp;
     String bidId;
+    String gameId;
+    String gameName;
+    long bidAcceptTimestamp;
+    String bidAcceptBy;
+    String bidAccepterName;
+    String gameStatus;
+    String image;
+    String resultUploadedBy;
+
+    public String getResultUploadedBy() {
+        return resultUploadedBy;
+    }
+
+    public void setResultUploadedBy(String resultUploadedBy) {
+        this.resultUploadedBy = resultUploadedBy;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public long getBidAcceptTimestamp() {
+        return bidAcceptTimestamp;
+    }
+
+    public void setBidAcceptTimestamp(long bidAcceptTimestamp) {
+        this.bidAcceptTimestamp = bidAcceptTimestamp;
+    }
+
+    public String getBidAcceptBy() {
+        return bidAcceptBy;
+    }
+
+    public void setBidAcceptBy(String bidAcceptBy) {
+        this.bidAcceptBy = bidAcceptBy;
+    }
+
+    public String getBidAccepterName() {
+        return bidAccepterName;
+    }
+
+    public void setBidAccepterName(String bidAccepterName) {
+        this.bidAccepterName = bidAccepterName;
+    }
+
+    public String getGameStatus() {
+        return gameStatus;
+    }
+
+    public void setGameStatus(String gameStatus) {
+        this.gameStatus = gameStatus;
+    }
+
+    public String getGameName() {
+        return gameName;
+    }
+
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
+    }
+
+    public String getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
+    }
 
     public String getBidId() {
         return bidId;
