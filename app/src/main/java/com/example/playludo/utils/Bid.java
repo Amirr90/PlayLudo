@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
 import com.example.playludo.interfaces.BidInterface;
 import com.example.playludo.models.AddCredits;
 import com.example.playludo.models.User;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -18,7 +15,7 @@ import com.google.firebase.firestore.WriteBatch;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.playludo.AddCreditsFragment.USERS_QUERY;
+import static com.example.playludo.fragments.AddCreditsFragment.USERS_QUERY;
 
 public class Bid extends AddCredits {
     private static final String TAG = "Bid";
@@ -27,18 +24,24 @@ public class Bid extends AddCredits {
     public static final String UID = "uid";
     public static final String TIMESTAMP = "timestamp";
     public static final String BID_STATUS = "bidStatus";
+    public static final String GAME_ID = "gameId";
     public static final String IS_ACCEPTED = "isAccepted";
     public static final String BID_STATUS_PENDING = "pending";
     public static final String NAME = "name";
+    public static final String IS_ACTIVE = "isActive";
+    public static final String GAME_NAME = "gameName";
     Activity activity;
     BidInterface bidInterface;
+    String gameId, gameName;
 
     public Bid(Activity activity) {
         this.activity = activity;
     }
 
-    public void start(BidInterface bidInterface) {
+    public void start(BidInterface bidInterface, String gameId, String gameName) {
         this.bidInterface = bidInterface;
+        this.gameId = gameId;
+        this.gameName = gameName;
         checkUserWallet();
     }
 
@@ -75,6 +78,9 @@ public class Bid extends AddCredits {
         bidMap.put(NAME, "Amir");
         bidMap.put(TIMESTAMP, System.currentTimeMillis());
         bidMap.put(BID_STATUS, false);
+        bidMap.put(GAME_ID, gameId);
+        bidMap.put(IS_ACTIVE, true);
+        bidMap.put(GAME_NAME, gameName);
         bidMap.put("bidId", "" + System.currentTimeMillis());
         DocumentReference sfRef = db.collection(BIDS).document();
         batch.set(sfRef, bidMap);

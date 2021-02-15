@@ -11,6 +11,9 @@
 
     </data>
 
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -63,7 +66,6 @@
                 android:layout_marginTop="8dp"
                 android:drawablePadding="10dp"
                 android:fontFamily="@font/poppins_semibold"
-                android:text="1000"
                 android:textColor="@android:color/white"
                 android:textSize="30sp"
                 app:drawableLeftCompat="@drawable/ic_baseline_account_balance_wallet_24"
@@ -77,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-8dp"
-                android:text="Total Wallet Value"
+                android:text="@string/total_wallet_value"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="@+id/tvFundAmount"
@@ -89,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Total Invest"
+                android:text="@string/total_invest"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/textView63"
@@ -150,7 +152,7 @@
                 android:id="@+id/btnAddMoreCredits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Credits"
+                android:text="@string/add_credits"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btnAddBid"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -161,7 +163,7 @@
                 android:id="@+id/btnAddBid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Submit BID"
+                android:text="@string/submit_bid"
                 app:layout_constraintBottom_toBottomOf="@+id/btnAddMoreCredits"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -171,24 +173,90 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/priceTab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+            tools:listitem="@layout/bid_price_view" />
 
-        </com.google.android.material.tabs.TabLayout>
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/viewPager"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bid_rec"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+            tools:listitem="@layout/bid_list_view" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#92EFEEEE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/priceTab">
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/poppins"
+                android:padding="10dp"
+                android:text="@string/active"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/YellowColo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tcActiveCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:padding="10dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/YellowColo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView11"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:padding="10dp"
+                android:text="@string/paired"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@android:color/holo_green_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tvPairedCounter"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvPairedCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="@font/poppins"
+                android:padding="10dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@android:color/holo_green_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
 </layout>

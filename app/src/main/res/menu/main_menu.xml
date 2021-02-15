@@ -3,29 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/wallet"
+        android:id="@+id/addCreditsFragment"
         android:icon="@drawable/ic_baseline_account_balance_wallet_24"
-        android:title="Wallet"
+        android:title="@string/wallet"
         app:showAsAction="always" />
     <item
         android:id="@+id/notification"
         android:icon="@drawable/ic_baseline_notifications_24"
-        android:title="Wallet"
+        android:title="@string/notifications"
         app:actionLayout="@layout/cart_item"
         app:showAsAction="always" />
     <item
-        android:id="@+id/setting"
+        android:id="@+id/myBidsListFragment"
         android:icon="@drawable/ic_baseline_account_balance_wallet_24"
-        android:title="My Bids"
+        android:title="@string/my_bids"
         app:showAsAction="never" />
     <item
-        android:id="@+id/transactions"
+        android:id="@+id/transactionFragment"
         android:icon="@drawable/ic_baseline_account_balance_wallet_24"
-        android:title="Transactions"
+        android:title="@string/transactions"
         app:showAsAction="never" />
     <item
         android:id="@+id/logout"
         android:icon="@drawable/ic_baseline_account_balance_wallet_24"
-        android:title="Logout"
+        android:title="@string/logout"
         app:showAsAction="never" />
 </menu>

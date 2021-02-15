@@ -3,7 +3,6 @@ package com.example.playludo.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -22,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.playludo.R;
 import com.example.playludo.databinding.FragmentBidDetailsBinding;
 import com.example.playludo.models.BidModel;
 import com.example.playludo.models.TransactionModel;
@@ -30,30 +28,23 @@ import com.example.playludo.models.User;
 import com.example.playludo.utils.AppUtils;
 import com.example.playludo.utils.Utils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.common.api.Batch;
-import com.google.android.gms.tasks.OnCanceledListener;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.playludo.AddCreditsFragment.USERS_QUERY;
+import static com.example.playludo.fragments.AddCreditsFragment.USERS_QUERY;
 import static com.example.playludo.fragments.BidFragment.BID_ID;
 import static com.example.playludo.fragments.BidFragment.BID_QUERY;
 import static com.example.playludo.utils.Bid.BID_STATUS;
@@ -67,8 +58,8 @@ public class BidDetailsFragment extends Fragment {
     public static final String BID_ACCEPTED_BY = "bidAcceptBy";
     public static final String BID_ACCEPTER_NAME = "bidAccepterName";
     public static final String GAME_STATUS = "gameStatus";
-    private static final String TRANSACTIONS = "Transactions";
-    private static final String TYPE_DEBIT = "debit";
+    public static final String TRANSACTIONS = "Transactions";
+    public static final String TYPE_DEBIT = "debit";
 
     NavController navController;
     FragmentBidDetailsBinding bidDetailsBinding;

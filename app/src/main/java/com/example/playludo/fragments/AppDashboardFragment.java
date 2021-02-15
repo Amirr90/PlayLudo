@@ -1,6 +1,10 @@
-package com.example.playludo;
+package com.example.playludo.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,11 +14,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
+import com.example.playludo.R;
 import com.example.playludo.databinding.FragmentAppDashboardBinding;
 import com.example.playludo.databinding.HomeViewBinding;
 import com.example.playludo.models.HomeScreenModel;
@@ -24,6 +24,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.example.playludo.models.AppConstant.FREE_FIRE;
+import static com.example.playludo.models.AppConstant.GAME_TYPE;
+import static com.example.playludo.models.AppConstant.LUDO_KING;
+import static com.example.playludo.models.AppConstant.POLL_8_BALL;
+import static com.example.playludo.models.AppConstant.PUB_G;
 
 public class AppDashboardFragment extends Fragment {
 
@@ -48,10 +54,10 @@ public class AppDashboardFragment extends Fragment {
 
     private List<HomeScreenModel> getHomeList() {
         List<HomeScreenModel> screenModels = new ArrayList<>();
-        screenModels.add(new HomeScreenModel(R.drawable.ludo_image, "Ludo King"));
-        screenModels.add(new HomeScreenModel(R.drawable.pool_image, "Pool"));
-        screenModels.add(new HomeScreenModel(R.drawable.pubg_image, "PubG"));
-        screenModels.add(new HomeScreenModel(R.drawable.frefire_image, "FreeFire"));
+        screenModels.add(new HomeScreenModel(R.drawable.ludo_image, LUDO_KING));
+        screenModels.add(new HomeScreenModel(R.drawable.pool_image, POLL_8_BALL));
+        screenModels.add(new HomeScreenModel(R.drawable.pubg_image, PUB_G));
+        screenModels.add(new HomeScreenModel(R.drawable.frefire_image, FREE_FIRE));
         return screenModels;
     }
 
@@ -79,7 +85,7 @@ public class AppDashboardFragment extends Fragment {
             holder.viewBinding.mainLayout.setOnClickListener(v -> {
                 if (position == 0) {
                     Bundle bundle = new Bundle();
-                    bundle.putString(GAME_NAME, "Ludo");
+                    bundle.putString(GAME_TYPE, homeScreenModel.getTitle());
                     navController.navigate(R.id.action_appDashboardFragment_to_dashboardFragment, bundle);
                 } else Toast.makeText(requireActivity(), "Coming Soon", Toast.LENGTH_SHORT).show();
 

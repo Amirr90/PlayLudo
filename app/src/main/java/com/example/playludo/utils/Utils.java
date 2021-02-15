@@ -25,7 +25,7 @@ public class Utils {
         else return "";
     }
 
-    private static List<BidModel> getBidPriceList() {
+    public static List<BidModel> getBidPriceList() {
         List<BidModel> bidModels = new ArrayList<>();
         bidModels.add(new BidModel("50"));
         bidModels.add(new BidModel("100"));
