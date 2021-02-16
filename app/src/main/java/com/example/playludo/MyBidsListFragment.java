@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.playludo.fragments.BidFragment.BID_QUERY;
+import static com.example.playludo.utils.Bid.IS_ACTIVE;
 import static com.example.playludo.utils.Bid.TIMESTAMP;
 import static com.example.playludo.utils.Utils.getUid;
 
@@ -40,11 +41,17 @@ public class MyBidsListFragment extends Fragment {
     MyBidsAdapter bidsAdapter;
     FragmentMyBidsListBinding myBidsListBinding;
     List<DocumentSnapshot> snapshots;
+    public static MyBidsListFragment instance;
+
+    public static MyBidsListFragment getInstance() {
+        return instance;
+    }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         myBidsListBinding = FragmentMyBidsListBinding.inflate(getLayoutInflater());
+        instance = this;
         return myBidsListBinding.getRoot();
     }
 
@@ -53,7 +60,7 @@ public class MyBidsListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         snapshots = new ArrayList<>();
-        bidsAdapter = new MyBidsAdapter(snapshots,requireActivity());
+        bidsAdapter = new MyBidsAdapter(snapshots, requireActivity());
         myBidsListBinding.recMyBids.setAdapter(bidsAdapter);
         myBidsListBinding.recMyBids.addItemDecoration(new
                 DividerItemDecoration(requireActivity(),
@@ -61,11 +68,13 @@ public class MyBidsListFragment extends Fragment {
         loadBidsListData();
     }
 
-    private void loadBidsListData() {
+    public void loadBidsListData() {
         AppUtils.showRequestDialog(requireActivity());
         Utils.getFireStoreReference().collection(BID_QUERY)
                 .whereEqualTo("uid", getUid())
+                .whereEqualTo(IS_ACTIVE, true)
                 .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
+                .limit(30)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     AppUtils.hideDialog();
@@ -73,6 +82,9 @@ public class MyBidsListFragment extends Fragment {
                         snapshots.clear();
                         snapshots.addAll(queryDocumentSnapshots.getDocuments());
                         bidsAdapter.notifyDataSetChanged();
+                    } else if (queryDocumentSnapshots.isEmpty()) {
+                        Toast.makeText(requireActivity(), "No Active bids found !!", Toast.LENGTH_SHORT).show();
+
                     } else {
                         Toast.makeText(requireActivity(), "No data found !!", Toast.LENGTH_SHORT).show();
                     }

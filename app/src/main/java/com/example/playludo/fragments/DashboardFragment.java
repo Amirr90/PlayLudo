@@ -57,7 +57,10 @@ import static com.example.playludo.fragments.BidFragment.BID_QUERY;
 import static com.example.playludo.models.AppConstant.GAME_TYPE;
 import static com.example.playludo.models.AppConstant.LUDO_KING;
 import static com.example.playludo.models.AppConstant.POLL_8_BALL;
+import static com.example.playludo.models.AppConstant.SIMPLE_JAKARTHA;
 import static com.example.playludo.utils.AppUtils.getFormatedAmount;
+import static com.example.playludo.utils.Bid.GAME_NAME;
+import static com.example.playludo.utils.Bid.IS_ACTIVE;
 import static com.example.playludo.utils.Bid.TIMESTAMP;
 import static com.example.playludo.utils.Utils.getFireStoreReference;
 import static com.example.playludo.utils.Utils.getUid;
@@ -128,6 +131,7 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
 
         final SubmitBidDialogViewBinding genderViewBinding = SubmitBidDialogViewBinding.bind(formElementsView);
 
+        genderViewBinding.textView46.setHint(gameType);
         genderViewBinding.etGameId.setHint(getIdHintText(gameType));
         genderViewBinding.etGameId.setVisibility(View.VISIBLE);
 
@@ -164,8 +168,8 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
     private String getIdHintText(String gameType) {
         if (gameType.equalsIgnoreCase(LUDO_KING))
             return "Enter Game ID";
-        else if (gameType.equalsIgnoreCase(POLL_8_BALL))
-            return "8 Ball Pool game id here";
+        else if (gameType.equalsIgnoreCase(SIMPLE_JAKARTHA))
+            return "Enter 8 Ball Pool game id here";
         else return "";
 
     }
@@ -192,12 +196,7 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
 
     private void addBidData() {
 
-        Utils.getFireStoreReference().collection(BID_QUERY).add(getBidModel()).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(requireActivity(), "Added !!", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.getLocalizedMessage()));
+        Utils.getFireStoreReference().collection(BID_QUERY).add(getBidModel()).addOnSuccessListener(documentReference -> Toast.makeText(requireActivity(), "Added !!", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.getLocalizedMessage()));
     }
 
     private BidModel getBidModel() {
@@ -233,6 +232,8 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
         String bidAmount = Utils.getBidPrice(position);
         getFireStoreReference().collection(BID_QUERY)
                 .whereEqualTo(BID_AMOUNT, bidAmount)
+                .whereEqualTo(GAME_NAME, gameType)
+                .whereEqualTo(IS_ACTIVE, true)
                 .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
                 .limit(30)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {

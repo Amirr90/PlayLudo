@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.example.playludo.interfaces.BidInterface;
 import com.example.playludo.models.AddCredits;
+import com.example.playludo.models.TransactionModel;
 import com.example.playludo.models.User;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
@@ -16,6 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.example.playludo.fragments.AddCreditsFragment.USERS_QUERY;
+import static com.example.playludo.fragments.BidDetailsFragment.TRANSACTIONS;
+import static com.example.playludo.fragments.BidDetailsFragment.TYPE_DEBIT;
+import static com.example.playludo.utils.Utils.getUid;
 
 public class Bid extends AddCredits {
     private static final String TAG = "Bid";
@@ -61,6 +65,7 @@ public class Bid extends AddCredits {
     private void initSubmitBid(String amount) {
 
         FirebaseFirestore db = Utils.getFireStoreReference();
+
         // Get a new write batch
         WriteBatch batch = db.batch();
 
@@ -85,6 +90,10 @@ public class Bid extends AddCredits {
         DocumentReference sfRef = db.collection(BIDS).document();
         batch.set(sfRef, bidMap);
 
+        // Create Transaction of User
+        DocumentReference transRef = db.collection(TRANSACTIONS).document();
+        batch.set(transRef, getTransactionModel(String.valueOf(amount)));
+
         // Commit the batch
         batch.commit().addOnSuccessListener(task -> {
             bidInterface.onBidPlaceSuccessFully(task);
@@ -94,5 +103,14 @@ public class Bid extends AddCredits {
             Log.d(TAG, "onFailure: " + e.getLocalizedMessage());
             bidInterface.onBidPlaceFailed(e.getLocalizedMessage());
         });
+    }
+
+    private TransactionModel getTransactionModel(String bidAmount) {
+        TransactionModel transactionModel = new TransactionModel();
+        transactionModel.setAmount(bidAmount);
+        transactionModel.setUid(getUid());
+        transactionModel.setTimestamp(System.currentTimeMillis());
+        transactionModel.setType(TYPE_DEBIT);
+        return transactionModel;
     }
 }

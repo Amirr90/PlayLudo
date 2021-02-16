@@ -41,6 +41,7 @@ public class BidFragment extends Fragment implements AdapterInterface {
     public static final String BID_QUERY = "Bids";
     public static final String BID_AMOUNT = "bidAmount";
     public static final String BID_ID = "bidId";
+    public static final String GAME_IMAGE = "gameImage";
     String bidValue;
     FragmentBidBinding bidBinding;
     BidAdapter bidAdapter;

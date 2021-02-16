@@ -113,6 +113,7 @@ public class TransactionFragment extends Fragment {
                 prefix = "+";
             else prefix = "-";
             holder.binding.tvTAmount.setText(prefix + AppUtils.getCurrencyFormat(snapshot.getString(AMOUNT)));
+            holder.binding.tvTimestamp.setText( AppUtils.getDateInDMYFormatFromTimestamp(snapshot.getLong(TIMESTAMP),"EEE, MMM d, h:mm a"));
         }
 
         @Override

@@ -40,7 +40,7 @@
     <fragment
         android:id="@+id/addCreditsFragment"
         android:name="com.example.playludo.fragments.AddCreditsFragment"
-        android:label="fragment_add_credits"
+        android:label="@string/wallet"
         tools:layout="@layout/fragment_add_credits">
         <action
             android:id="@+id/action_addCreditsFragment_to_addedSuccesssfullyFragment"
@@ -86,6 +86,13 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_appDashboardFragment_to_poolGameListFragment"
+            app:destination="@id/poolGameListFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/transactionFragment"
@@ -97,4 +104,17 @@
         android:name="com.example.playludo.MyBidsListFragment"
         android:label="My Bids"
         tools:layout="@layout/fragment_my_bids_list" />
+    <fragment
+        android:id="@+id/poolGameListFragment"
+        android:name="com.example.playludo.PoolGameListFragment"
+        android:label="Pool"
+        tools:layout="@layout/fragment_pool_game_list" >
+        <action
+            android:id="@+id/action_poolGameListFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
 </navigation>

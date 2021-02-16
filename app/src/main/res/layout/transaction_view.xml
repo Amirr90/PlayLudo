@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -25,7 +24,7 @@
             android:fontFamily="@font/poppins"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@{transaction.getString(`type`).equals(`debit`)?Color.parseColor(`#ff3300`):Color.parseColor(`#00e600`)}"
-            app:layout_constraintBottom_toBottomOf="@+id/textView20"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTimestamp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView19" />
 
@@ -34,13 +33,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
-            android:text="@{transaction.getString(`type`).equals(`credit`)?`Added to wallet`:transaction.getString(`type`).equals(`withdraw`)?`Withdraw to bank`:`Deduct agains BID`}"
+            android:text="@{transaction.getString(`type`).equals(`credit`)?`Added to wallet`:transaction.getString(`type`).equals(`withdraw`)?`Withdraw to bank`:`Deduct against BID`}"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView20"
+            android:id="@+id/tvTimestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"

@@ -101,12 +101,7 @@ public class AddCreditsFragment extends Fragment {
                 initTransaction(tId);
             }
         });
-        addCreditsBinding.btnWithdrawAmount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showWithdrawAmountDialog();
-            }
-        });
+        addCreditsBinding.btnWithdrawAmount.setOnClickListener(v -> showWithdrawAmountDialog());
 
 
     }

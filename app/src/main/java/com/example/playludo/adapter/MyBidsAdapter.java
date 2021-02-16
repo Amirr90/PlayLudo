@@ -2,6 +2,7 @@ package com.example.playludo.adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.playludo.MyBidsListFragment;
 import com.example.playludo.databinding.MyBidsViewBinding;
 import com.example.playludo.models.TransactionModel;
 import com.example.playludo.utils.AppUtils;
@@ -37,6 +39,7 @@ import static com.example.playludo.utils.Bid.TIMESTAMP;
 import static com.example.playludo.utils.Utils.getUid;
 
 public class MyBidsAdapter extends RecyclerView.Adapter<MyBidsAdapter.BidsVH> {
+    private static final String TAG = "MyBidsAdapter";
     List<DocumentSnapshot> snapshotList;
     Activity activity;
 
@@ -57,15 +60,15 @@ public class MyBidsAdapter extends RecyclerView.Adapter<MyBidsAdapter.BidsVH> {
     public void onBindViewHolder(@NonNull MyBidsAdapter.BidsVH holder, int position) {
         DocumentSnapshot snapshot = snapshotList.get(position);
         holder.binding.setMyBids(snapshot);
-      try {
-          if (null != snapshot) {
-              holder.binding.tvBidsTimestamp.setText(AppUtils.getTimeAgo(snapshot.getLong(TIMESTAMP)));
-              holder.binding.tvGameAmount.setText(AppUtils.getCurrencyFormat(snapshot.getString(BID_AMOUNT)));
-              holder.binding.btnCancel.setEnabled(!snapshot.getBoolean(BID_STATUS));
-          }
-      } catch (Exception e) {
-          e.printStackTrace();
-      }
+        try {
+            if (null != snapshot) {
+                holder.binding.tvBidsTimestamp.setText(AppUtils.getTimeAgo(snapshot.getLong(TIMESTAMP)));
+                holder.binding.tvGameAmount.setText(AppUtils.getCurrencyFormat(snapshot.getString(BID_AMOUNT)));
+                holder.binding.btnCancel.setEnabled(!snapshot.getBoolean(BID_STATUS));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         holder.binding.btnCancel.setOnClickListener(v -> {
             if (!snapshot.getBoolean(BID_STATUS)) {
@@ -100,8 +103,8 @@ public class MyBidsAdapter extends RecyclerView.Adapter<MyBidsAdapter.BidsVH> {
         // Credits user's Wallet
         DocumentReference sfRef = db.collection(USERS_QUERY).document(getUid());
         Map<String, Object> userMap = new HashMap<>();
-        map.put(CREDITS, FieldValue.increment(Long.parseLong(snapshot.getString(BID_AMOUNT))));
-        map.put(INVEST, FieldValue.increment(-Long.parseLong(snapshot.getString(BID_AMOUNT))));
+        userMap.put(CREDITS, FieldValue.increment(Long.parseLong(snapshot.getString(BID_AMOUNT))));
+        userMap.put(INVEST, FieldValue.increment(-Long.parseLong(snapshot.getString(BID_AMOUNT))));
         batch.update(sfRef, userMap);
 
         // Create Transaction of User
@@ -111,8 +114,8 @@ public class MyBidsAdapter extends RecyclerView.Adapter<MyBidsAdapter.BidsVH> {
         // Commit the batch
         batch.commit().addOnSuccessListener(aVoid -> {
             AppUtils.hideDialog();
-            Toast.makeText(activity, "Money refunded to wallet successfully !! ", Toast.LENGTH_SHORT).show();
-            notifyDataSetChanged();
+            Toast.makeText(activity, "Money refunded to wallet successfully !!", Toast.LENGTH_SHORT).show();
+            MyBidsListFragment.getInstance().loadBidsListData();
         }).addOnFailureListener(e -> Toast.makeText(activity, "try again !!", Toast.LENGTH_SHORT).show());
     }
 

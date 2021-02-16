@@ -47,6 +47,7 @@ import java.util.Map;
 import static com.example.playludo.fragments.AddCreditsFragment.USERS_QUERY;
 import static com.example.playludo.fragments.BidFragment.BID_ID;
 import static com.example.playludo.fragments.BidFragment.BID_QUERY;
+import static com.example.playludo.fragments.BidFragment.GAME_IMAGE;
 import static com.example.playludo.utils.Bid.BID_STATUS;
 import static com.example.playludo.utils.Utils.getFireStoreReference;
 import static com.example.playludo.utils.Utils.getUid;
@@ -65,6 +66,9 @@ public class BidDetailsFragment extends Fragment {
     FragmentBidDetailsBinding bidDetailsBinding;
     String bidId = null;
     ProgressDialog progressDialog;
+    int gameImage;
+    String bidderId = null;
+    BidModel bidModel;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -86,22 +90,45 @@ public class BidDetailsFragment extends Fragment {
 
         AppUtils.showRequestDialog(requireActivity());
         bidId = getArguments().getString(BID_ID);
+        gameImage = getArguments().getInt(GAME_IMAGE);
+        bidDetailsBinding.imageView3.setImageResource(gameImage);
         getBidData();
 
         bidDetailsBinding.btnAccept.setOnClickListener(v -> showAlertDialog(bidDetailsBinding.tvBidingAmount.getText().toString()));
-        bidDetailsBinding.btnWin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(requireActivity(), "Clicked !!", Toast.LENGTH_SHORT).show();
-                selectImage();
-            }
+        bidDetailsBinding.btnWin.setOnClickListener(v -> {
+            Toast.makeText(requireActivity(), "Clicked !!", Toast.LENGTH_SHORT).show();
+            selectImage();
         });
+
+        bidDetailsBinding.tvRequestNewId.setOnClickListener(v -> {
+            AppUtils.showRequestDialog(requireActivity());
+            sendRequestId();
+        });
+    }
+
+    private void sendRequestId() {
+        if (null != bidModel) {
+            Utils.getFireStoreReference().collection(USERS_QUERY).document(bidModel.getUid())
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        User user = documentSnapshot.toObject(User.class);
+                        if (null != user) {
+                            String bidderToken = user.getToken();
+                            sendNotification(bidderToken);
+                        }
+                    });
+        }
+    }
+
+    private void sendNotification(String bidderToken) {
+
     }
 
     private void selectImage() {
 
         ImagePicker.Companion.with(this)
-                //.crop(4f, 4f)                    //Crop image(Optional), Check Customization for more option
+
+                //Crop image(Optional), Check Customization for more option
                 .compress(512)//Final image size will be less than 1 MB(Optional)
                 .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
                 .start();
@@ -265,7 +292,7 @@ public class BidDetailsFragment extends Fragment {
                     if (null == documentSnapshot) {
                         return;
                     }
-                    BidModel bidModel = documentSnapshot.toObject(BidModel.class);
+                    bidModel = documentSnapshot.toObject(BidModel.class);
                     bidDetailsBinding.setBidModel(bidModel);
 
 

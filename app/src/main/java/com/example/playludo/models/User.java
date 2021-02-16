@@ -8,7 +8,15 @@ public class User {
     long invest;
     long earn;
     String image;
+    String token;
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public long getInvest() {
         return invest;

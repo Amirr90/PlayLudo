@@ -7,6 +7,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -16,8 +20,17 @@ import android.widget.TextView;
 
 import com.example.playludo.PaymentUtils.StartPayment;
 import com.example.playludo.databinding.ActivityHomeScreenBinding;
+import com.example.playludo.utils.AppUtils;
+import com.example.playludo.utils.Utils;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultWithDataListener;
+
+import static com.example.playludo.fragments.AddCreditsFragment.USERS_QUERY;
+import static com.example.playludo.utils.Utils.getUid;
 
 
 public class HomeScreen extends AppCompatActivity implements PaymentResultWithDataListener {
@@ -48,6 +61,7 @@ public class HomeScreen extends AppCompatActivity implements PaymentResultWithDa
         super.onStart();
         navController = Navigation.findNavController(this, R.id.nav_host);
         NavigationUI.setupActionBarWithNavController(this, navController);
+        generateFcmToken();
     }
 
     @Override
@@ -68,7 +82,27 @@ public class HomeScreen extends AppCompatActivity implements PaymentResultWithDa
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.logout) {
+            showLogoutDialog();
+        }
         return NavigationUI.onNavDestinationSelected(item, navController) || super.onOptionsItemSelected(item);
+    }
+
+    private void showLogoutDialog() {
+        new AlertDialog.Builder(HomeScreen.this).setMessage("Want to Logout??").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                AppUtils.showRequestDialog(HomeScreen.this);
+                AuthUI.getInstance()
+                        .signOut(HomeScreen.this)
+                        .addOnCompleteListener(task -> {
+                            AppUtils.hideDialog();
+                            startActivity(new Intent(HomeScreen.this, SplashScreen.class));
+                            finish();
+                        });
+            }
+        }).setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
     }
 
     public void navigate(int id) {
@@ -91,5 +125,15 @@ public class HomeScreen extends AppCompatActivity implements PaymentResultWithDa
     public void onPaymentError(int i, String s, PaymentData paymentData) {
         Log.d(TAG, "onPaymentError: " + paymentData.getData());
         StartPayment.getInstance().updatePaymentStatus(0, paymentData.getData().toString());
+    }
+
+    public static void generateFcmToken() {
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(instanceIdResult -> {
+            String newToken = instanceIdResult.getToken();
+            Log.e("newToken2", newToken);
+            Utils.getFireStoreReference().collection(USERS_QUERY).document(getUid()).update("token", newToken);
+        });
+
     }
 }
