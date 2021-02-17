@@ -245,7 +245,6 @@ public class AddCreditsFragment extends Fragment {
     private void updateToUserWallet() {
         Map<String, Object> map = new HashMap<>();
         map.put("credits", FieldValue.increment(Long.parseLong(amount)));
-        map.put("invest", FieldValue.increment(Long.parseLong(amount)));
 
         Utils.getFireStoreReference().collection(USERS_QUERY).document(getUid()).update(map).addOnSuccessListener(aVoid -> {
             AppUtils.hideDialog();

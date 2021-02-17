@@ -36,6 +36,7 @@ import com.example.playludo.utils.AppUtils;
 import com.example.playludo.utils.Bid;
 import com.example.playludo.utils.Utils;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -83,6 +84,15 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
     List<BidModel> bidModels = new ArrayList<>();
     String gameType = null;
 
+    String userName;
+
+    public String getUserName() {
+        return userName == null ? FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() : userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -148,7 +158,7 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
                 }
                 optionDialog.dismiss();
                 AppUtils.showRequestDialog(requireActivity(), false);
-                Bid bid = new Bid(requireActivity());
+                Bid bid = new Bid(requireActivity(), getUserName());
                 bid.setAmount(amount);
                 bid.setUid(getUid());
                 bid.start(this, gameId, gameType);
@@ -186,6 +196,8 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
                         dashboardBinding.tvFundAmount.setText(AppUtils.getCurrencyFormat(user.getCredits()));
                         dashboardBinding.tvInvested.setText(AppUtils.getCurrencyFormat(user.getInvest()));
                         dashboardBinding.tvEarned.setText(AppUtils.getCurrencyFormat(user.getEarn()));
+                        setUserName(user.getName());
+
                     } else
                         Toast.makeText(requireActivity(), "User not found !!", Toast.LENGTH_SHORT).show();
                 } else

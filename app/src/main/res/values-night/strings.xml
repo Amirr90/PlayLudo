@@ -18,6 +18,8 @@
     <string name="ok">OK</string>
     <string name="enter_game_id">Enter Game Id</string>
     <string name="notifications">Notifications</string>
+    <string name="msg_subscribed">subsscribed to newBid !!</string>
+    <string name="msg_subscribe_failed">subscribe to newBids failed !!</string>
 
     <string-array name="game_name_array">
         <item>Cappuccino</item>

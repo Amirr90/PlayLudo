@@ -36,10 +36,11 @@ public class Bid extends AddCredits {
     public static final String GAME_NAME = "gameName";
     Activity activity;
     BidInterface bidInterface;
-    String gameId, gameName;
+    String gameId, gameName, name;
 
-    public Bid(Activity activity) {
+    public Bid(Activity activity, String name) {
         this.activity = activity;
+        this.name = name;
     }
 
     public void start(BidInterface bidInterface, String gameId, String gameName) {
@@ -80,7 +81,7 @@ public class Bid extends AddCredits {
         Map<String, Object> bidMap = new HashMap<>();
         bidMap.put(BID_AMOUNT, amount);
         bidMap.put(UID, getUid());
-        bidMap.put(NAME, "Amir");
+        bidMap.put(NAME, name);
         bidMap.put(TIMESTAMP, System.currentTimeMillis());
         bidMap.put(BID_STATUS, false);
         bidMap.put(GAME_ID, gameId);

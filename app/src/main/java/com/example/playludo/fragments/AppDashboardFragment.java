@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +28,12 @@ import com.example.playludo.models.User;
 import com.example.playludo.utils.AppUtils;
 import com.example.playludo.utils.Bid;
 import com.example.playludo.utils.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,8 +51,10 @@ import static com.example.playludo.models.AppConstant.PUB_G;
 import static com.example.playludo.utils.Utils.getUid;
 
 public class AppDashboardFragment extends Fragment {
+    private static final String TAG = "AppDashboardFragment";
 
     public static final String GAME_NAME = "gameName";
+    public static final String ADD_NEW_BID_TOPIC = "AddNewBidTopic";
     FragmentAppDashboardBinding binding;
     NavController navController;
     AlertDialog optionDialog;
@@ -66,6 +72,18 @@ public class AppDashboardFragment extends Fragment {
         navController = Navigation.findNavController(view);
         binding.homeRec.setAdapter(new HomeAdapter(getHomeList()));
         checkForUsername();
+        subscribeToNewBidsTopic();
+    }
+
+    private void subscribeToNewBidsTopic() {
+        FirebaseMessaging.getInstance().subscribeToTopic(ADD_NEW_BID_TOPIC)
+                .addOnCompleteListener(task -> {
+                    String msg = getString(R.string.msg_subscribed);
+                    if (!task.isSuccessful()) {
+                        msg = getString(R.string.msg_subscribe_failed);
+                    }
+                    Log.d(TAG, msg);
+                });
     }
 
     private void checkForUsername() {

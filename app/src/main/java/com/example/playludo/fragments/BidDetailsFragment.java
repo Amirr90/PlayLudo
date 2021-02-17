@@ -3,6 +3,7 @@ package com.example.playludo.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -96,14 +97,21 @@ public class BidDetailsFragment extends Fragment {
 
         bidDetailsBinding.btnAccept.setOnClickListener(v -> showAlertDialog(bidDetailsBinding.tvBidingAmount.getText().toString()));
         bidDetailsBinding.btnWin.setOnClickListener(v -> {
-            Toast.makeText(requireActivity(), "Clicked !!", Toast.LENGTH_SHORT).show();
             selectImage();
         });
+
+        bidDetailsBinding.btnLoss.setOnClickListener(v -> new AlertDialog.Builder(requireActivity()).setMessage("Confirm to update Loss??")
+                .setPositiveButton("Yes", (dialog, which) -> updateAsLoos()).setNegativeButton("No", (dialog, which) -> {
+                }).show());
 
         bidDetailsBinding.tvRequestNewId.setOnClickListener(v -> {
             AppUtils.showRequestDialog(requireActivity());
             sendRequestId();
         });
+    }
+
+    private void updateAsLoos() {
+        Toast.makeText(requireActivity(), "Will Update Status As Loss !!", Toast.LENGTH_SHORT).show();
     }
 
     private void sendRequestId() {
@@ -179,7 +187,7 @@ public class BidDetailsFragment extends Fragment {
             imageMap.put("resultUploadedBy", getUid());
             uploadImageUriRef.update(imageMap).addOnSuccessListener(aVoid -> {
                 progressDialog.dismiss();
-                Toast.makeText(requireActivity(), " Image Uploaded", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), "Result Uploaded Successfully !!", Toast.LENGTH_SHORT).show();
                 getBidData();
             });
         })).addOnCanceledListener(() -> {
@@ -208,7 +216,7 @@ public class BidDetailsFragment extends Fragment {
         AppUtils.showRequestDialog(requireActivity(), false);
         String bidAmount = bidDetailsBinding.textView16.getText().toString();
         //checking wallet amount
-        Utils.getFireStoreReference().collection(USERS_QUERY).document(getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        getFireStoreReference().collection(USERS_QUERY).document(getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (null == documentSnapshot) {
@@ -221,7 +229,10 @@ public class BidDetailsFragment extends Fragment {
                 User user = documentSnapshot.toObject(User.class);
                 if (null != user) {
                     if (user.getCredits() >= Integer.parseInt(bidAmount)) {
-                        initBatchToAccecptBid(bidAmount);
+                        initBatchToAcceptBid(bidAmount);
+                    } else {
+                        AppUtils.hideDialog();
+                        Toast.makeText(requireActivity(), "Insufficient Balance !!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -232,7 +243,7 @@ public class BidDetailsFragment extends Fragment {
 
     }
 
-    private void initBatchToAccecptBid(String bidAmount) {
+    private void initBatchToAcceptBid(String bidAmount) {
         FirebaseFirestore db = Utils.getFireStoreReference();
         // Get a new write batch
         WriteBatch batch = db.batch();
@@ -278,13 +289,13 @@ public class BidDetailsFragment extends Fragment {
         map.put(BID_STATUS, true);
         map.put(BID_ACCEPT_TIMESTAMP, System.currentTimeMillis());
         map.put(BID_ACCEPTED_BY, getUid());
-        map.put(BID_ACCEPTER_NAME, "Demo");
+        map.put(BID_ACCEPTER_NAME, DashboardFragment.getInstance().getUserName());
         map.put(GAME_STATUS, "onGoing");
         return map;
     }
 
     private void getBidData() {
-        Utils.getFireStoreReference().collection(BID_QUERY).document(bidId)
+        getFireStoreReference().collection(BID_QUERY).document(bidId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     AppUtils.hideDialog();
@@ -303,9 +314,22 @@ public class BidDetailsFragment extends Fragment {
 
                         if (null != bidModel.getBidAcceptBy())
                             if (bidModel.getUid().equals(getUid()) || bidModel.getBidAcceptBy().equals(getUid())) {
-                                if (null == bidModel.getBidAcceptBy())
+                                if (null == bidModel.getImage())
+                                    bidDetailsBinding.resultLay.setVisibility(View.VISIBLE);
+                                else bidDetailsBinding.resultLay.setVisibility(View.GONE);
+
+
+                                if (null != bidModel.getImage())
+                                    bidDetailsBinding.textView18.setVisibility(bidModel.getImage().equals("") ? View.GONE : View.VISIBLE);
+                                else bidDetailsBinding.textView18.setVisibility(View.GONE);
+
+
+
+
+                                /* *//* if (null == bidModel.getBidAcceptBy())
                                     bidDetailsBinding.resultLay.setVisibility(View.GONE);
-                                else if (null != bidModel.getImage()) {
+                                else*//*
+                                if (null != bidModel.getImage()) {
                                     bidDetailsBinding.resultLay.setVisibility(View.GONE);
                                 } else if (null != bidModel.getResultUploadedBy() && bidModel.getResultUploadedBy().equals(getUid())) {
                                     bidDetailsBinding.resultLay.setVisibility(View.GONE);
@@ -314,11 +338,11 @@ public class BidDetailsFragment extends Fragment {
                                 }
 
                                 if (null != bidModel.getImage())
-
                                     bidDetailsBinding.textView18.setVisibility(bidModel.getImage().equals("") ? View.GONE : View.VISIBLE);
+*/
 
-
-                            }
+                            } else Log.d(TAG, "getBidData: Bidder ID and AccepterID not Same");
+                        else Log.d(TAG, "getBidData: null");
                     }
 
                 }).addOnFailureListener(e -> {
