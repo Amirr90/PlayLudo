@@ -12,13 +12,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ApiUtils {
-    public static void updateBidStatus(BidModel model,
-                                       final ApiCallbackInterface apiCallbackInterface) {
+    public static void updateBidStatus(BidModel model, final ApiCallbackInterface apiCallbackInterface) {
 
         try {
             final Api api = URLUtils.getAPIService();
             Call<BidRes> dashBoardResCall = api.updateBidStatus(model);
-
             dashBoardResCall.enqueue(new Callback<BidRes>() {
                 @Override
                 public void onResponse(@NotNull Call<BidRes> call, @NotNull Response<BidRes> response) {

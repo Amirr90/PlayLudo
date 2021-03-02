@@ -36,7 +36,10 @@ import com.example.playludo.utils.AppUtils;
 import com.example.playludo.utils.Bid;
 import com.example.playludo.utils.Utils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.common.api.Batch;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -66,6 +69,7 @@ import static com.example.playludo.utils.AppConstant.TYPE_DEBIT;
 import static com.example.playludo.utils.AppUtils.getIdHintText;
 import static com.example.playludo.utils.Bid.BID_STATUS;
 import static com.example.playludo.utils.Utils.getFireStoreReference;
+import static com.example.playludo.utils.Utils.getMobile;
 import static com.example.playludo.utils.Utils.getUid;
 
 
@@ -77,7 +81,7 @@ public class BidDetailsFragment extends Fragment {
     FragmentBidDetailsBinding bidDetailsBinding;
     String bidId = null;
     ProgressDialog progressDialog;
-    int gameImage;
+    // int gameImage;
     BidModel bidModel;
     AlertDialog optionDialog;
 
@@ -100,9 +104,8 @@ public class BidDetailsFragment extends Fragment {
             return;
 
         AppUtils.showRequestDialog(requireActivity());
-        bidId = getArguments().getString(BID_ID);
-        gameImage = getArguments().getInt(GAME_IMAGE);
-        bidDetailsBinding.imageView3.setImageResource(gameImage);
+        bidId = BidDetailsFragmentArgs.fromBundle(getArguments()).getGameId();
+        Log.d(TAG, "onViewCreated: BidId " + bidId);
         getBidData();
 
         bidDetailsBinding.btnAccept.setOnClickListener(v -> showAlertDialog(bidDetailsBinding.tvBidingAmount.getText().toString()));
@@ -118,12 +121,29 @@ public class BidDetailsFragment extends Fragment {
             AppUtils.showRequestDialog(requireActivity());
             sendRequestId();
         });
+        bidDetailsBinding.btnRequestContact.setOnClickListener(v -> {
+            AppUtils.showRequestDialog(requireActivity());
+            sendShareContact();
+        });
+    }
+
+    private void sendShareContact() {
+        getFireStoreReference().collection(BID_QUERY).document(bidId).update("contactDetails", getMobile())
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(requireActivity(), "Contact Shared successfully !!", Toast.LENGTH_SHORT).show();
+                    AppUtils.hideDialog();
+                    getBidData();
+                }).addOnFailureListener(e -> {
+            Toast.makeText(requireActivity(), "unable to share contact details, try again !!", Toast.LENGTH_SHORT).show();
+            AppUtils.hideDialog();
+
+        });
     }
 
     private void updateAsLoos() {
-
         Bid bid = new Bid(requireActivity());
         BidModel bidModel = new BidModel();
+        bidModel.setBidId(bidId);
         bid.loss(bidModel, new ApiCallbackInterface() {
             @Override
             public void onSuccess(Object obj) {
@@ -136,6 +156,7 @@ public class BidDetailsFragment extends Fragment {
                 Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
             }
         });
+
 
     }
 
@@ -230,8 +251,7 @@ public class BidDetailsFragment extends Fragment {
                     dialog.dismiss();
                     if (bidModel.getGameName().equals(AppConstant.SIMPLE_JAKARTHA)) {
                         openRequestUniqueIdDialog();
-                    }
-                    else acceptBid("");
+                    } else acceptBid("");
 
                 }).setNegativeButton("No", (dialog, which) -> {
 
@@ -384,6 +404,9 @@ public class BidDetailsFragment extends Fragment {
                                 if (null != bidModel.getImage())
                                     bidDetailsBinding.textView18.setVisibility(bidModel.getImage().equals("") ? View.GONE : View.VISIBLE);
                                 else bidDetailsBinding.textView18.setVisibility(View.GONE);
+
+                                bidDetailsBinding.btnRequestContact.setVisibility(bidModel.getUid().equals(getUid()) ? View.VISIBLE : View.GONE);
+
 
                             } else Log.d(TAG, "getBidData: Bidder ID and AccepterID not Same");
                         else Log.d(TAG, "getBidData: null");

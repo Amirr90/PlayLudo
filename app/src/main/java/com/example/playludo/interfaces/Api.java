@@ -10,7 +10,6 @@ import retrofit2.http.POST;
 public interface Api {
 
     @POST("updateBidStatus")
-    Call<BidRes> updateBidStatus(
-            @Body BidModel dashboard);
+    Call<BidRes> updateBidStatus(@Body BidModel dashboard);
 
 }

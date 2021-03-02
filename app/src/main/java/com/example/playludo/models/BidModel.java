@@ -16,6 +16,16 @@ public class BidModel {
     String image;
     String resultUploadedBy;
     String playerTwoUniqueId;
+    String contactDetails;
+
+
+    public String getContactDetails() {
+        return contactDetails;
+    }
+
+    public void setContactDetails(String contactDetails) {
+        this.contactDetails = contactDetails;
+    }
 
     public String getPlayerTwoUniqueId() {
         return playerTwoUniqueId;

@@ -168,7 +168,6 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
     }
 
 
-
     private void updateUserData() {
         Utils.getFireStoreReference().collection(USERS_QUERY).document(getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -266,9 +265,10 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
     @Override
     public void onItemClicked(Object obj) {
         BidModel bidModel = (BidModel) obj;
-        Bundle bundle = new Bundle();
-        bundle.putString(BID_ID, bidModel.getBidId());
-        HomeScreen.getInstance().navigate(R.id.action_dashboardFragment_to_bidDetailsFragment, bundle);
+        Log.d(TAG, "onItemClicked: " + bidModel.getBidId());
+        DashboardFragmentDirections.ActionDashboardFragmentToBidDetailsFragment action = DashboardFragmentDirections.actionDashboardFragmentToBidDetailsFragment();
+        action.setGameId(bidModel.getBidId());
+        navController.navigate(action);
     }
 
     public void updateActiveCounter(int active, int paired) {

@@ -38,6 +38,8 @@ public class Utils {
     }
 
     public static String getMobile() {
+        if (null == FirebaseAuth.getInstance().getCurrentUser())
+            return "";
         return FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
     }
 }

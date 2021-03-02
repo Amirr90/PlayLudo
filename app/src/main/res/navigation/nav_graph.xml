@@ -36,7 +36,15 @@
         android:id="@+id/bidDetailsFragment"
         android:name="com.example.playludo.fragments.BidDetailsFragment"
         android:label="BId Details"
-        tools:layout="@layout/fragment_bid_details" />
+        tools:layout="@layout/fragment_bid_details">
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="https://www.playLudo/{gameId}" />
+        <argument
+            android:name="gameId"
+            app:argType="string"
+            android:defaultValue="0" />
+    </fragment>
     <fragment
         android:id="@+id/addCreditsFragment"
         android:name="com.example.playludo.fragments.AddCreditsFragment"

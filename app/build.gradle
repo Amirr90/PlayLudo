@@ -76,6 +76,8 @@ dependencies {
 
     implementation 'com.razorpay:checkout:1.5.16'
 
+    apply plugin: "androidx.navigation.safeargs"
+
 
 
 }

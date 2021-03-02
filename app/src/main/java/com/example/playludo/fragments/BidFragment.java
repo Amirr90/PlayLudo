@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
 import android.util.Log;
@@ -46,6 +48,7 @@ public class BidFragment extends Fragment implements AdapterInterface {
     FragmentBidBinding bidBinding;
     BidAdapter bidAdapter;
     List<BidModel> bidModels;
+    NavController navController;
 
     public BidFragment(String bidValue) {
         this.bidValue = bidValue;
@@ -62,6 +65,7 @@ public class BidFragment extends Fragment implements AdapterInterface {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        navController = Navigation.findNavController(view);
         AppUtils.showRequestDialog(requireActivity());
         bidModels = new ArrayList<>();
         bidAdapter = new BidAdapter(bidModels, this);
@@ -104,8 +108,9 @@ public class BidFragment extends Fragment implements AdapterInterface {
     @Override
     public void onItemClicked(Object obj) {
         BidModel bidModel = (BidModel) obj;
-        Bundle bundle = new Bundle();
-        bundle.putString(BID_ID, bidModel.getBidId());
-        HomeScreen.getInstance().navigate(R.id.action_dashboardFragment_to_bidDetailsFragment, bundle);
+        Log.d(TAG, "onItemClicked: "+bidModel.getBidId());
+        DashboardFragmentDirections.ActionDashboardFragmentToBidDetailsFragment action = DashboardFragmentDirections.actionDashboardFragmentToBidDetailsFragment();
+        action.setGameId(bidModel.getBidId());
+        navController.navigate(action);
     }
 }
