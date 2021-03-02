@@ -15,24 +15,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.playludo.databinding.FragmentTransactionBinding;
 import com.example.playludo.databinding.TransactionViewBinding;
+import com.example.playludo.utils.AppConstant;
 import com.example.playludo.utils.AppUtils;
 import com.example.playludo.utils.Utils;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.playludo.fragments.BidDetailsFragment.TRANSACTIONS;
 import static com.example.playludo.utils.Bid.TIMESTAMP;
 import static com.example.playludo.utils.Bid.UID;
 import static com.example.playludo.utils.Utils.getUid;
-import static com.example.playludo.utils.WithdrawAmount.TYPE_WITHDRAW;
 
 
 public class TransactionFragment extends Fragment {
@@ -67,7 +62,7 @@ public class TransactionFragment extends Fragment {
 
     private void loadData() {
         AppUtils.showRequestDialog(requireActivity());
-        Utils.getFireStoreReference().collection(TRANSACTIONS).whereEqualTo(UID, getUid())
+        Utils.getFireStoreReference().collection(AppConstant.TRANSACTIONS).whereEqualTo(UID, getUid())
                 .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
                 .limit(20)
                 .get()

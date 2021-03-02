@@ -3,6 +3,12 @@ package com.example.playludo.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,16 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
-
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.playludo.HomeScreen;
 import com.example.playludo.R;
@@ -32,13 +28,12 @@ import com.example.playludo.interfaces.AdapterInterface;
 import com.example.playludo.interfaces.BidInterface;
 import com.example.playludo.models.BidModel;
 import com.example.playludo.models.User;
+import com.example.playludo.utils.AppConstant;
 import com.example.playludo.utils.AppUtils;
 import com.example.playludo.utils.Bid;
 import com.example.playludo.utils.Utils;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -50,16 +45,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.example.playludo.fragments.AddCreditsFragment.USERS_QUERY;
 import static com.example.playludo.adapter.PriceAdapter.selectedPosition;
+import static com.example.playludo.fragments.AddCreditsFragment.USERS_QUERY;
 import static com.example.playludo.fragments.BidFragment.BID_AMOUNT;
 import static com.example.playludo.fragments.BidFragment.BID_ID;
 import static com.example.playludo.fragments.BidFragment.BID_QUERY;
-import static com.example.playludo.models.AppConstant.GAME_TYPE;
-import static com.example.playludo.models.AppConstant.LUDO_KING;
-import static com.example.playludo.models.AppConstant.POLL_8_BALL;
-import static com.example.playludo.models.AppConstant.SIMPLE_JAKARTHA;
 import static com.example.playludo.utils.AppUtils.getFormatedAmount;
+import static com.example.playludo.utils.AppUtils.getIdHintText;
 import static com.example.playludo.utils.Bid.GAME_NAME;
 import static com.example.playludo.utils.Bid.IS_ACTIVE;
 import static com.example.playludo.utils.Bid.TIMESTAMP;
@@ -123,7 +115,7 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
 
         if (null == getArguments())
             return;
-        gameType = getArguments().getString(GAME_TYPE);
+        gameType = getArguments().getString(AppConstant.GAME_TYPE);
         updateUserData();
 
         setDashboardRecData();
@@ -175,14 +167,6 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
 
     }
 
-    private String getIdHintText(String gameType) {
-        if (gameType.equalsIgnoreCase(LUDO_KING))
-            return "Enter Game ID";
-        else if (gameType.equalsIgnoreCase(SIMPLE_JAKARTHA))
-            return "Enter 8 Ball Pool game id here";
-        else return "";
-
-    }
 
 
     private void updateUserData() {

@@ -1,6 +1,10 @@
-package com.example.playludo;
+package com.example.playludo.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,14 +14,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
+import com.example.playludo.R;
 import com.example.playludo.databinding.FragmentPoolGameListBinding;
 import com.example.playludo.databinding.HomeViewBinding;
-import com.example.playludo.fragments.AppDashboardFragment;
 import com.example.playludo.models.HomeScreenModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,12 +26,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.example.playludo.fragments.BidFragment.GAME_IMAGE;
-import static com.example.playludo.models.AppConstant.FREE_FIRE;
-import static com.example.playludo.models.AppConstant.GAME_TYPE;
-import static com.example.playludo.models.AppConstant.LUDO_KING;
-import static com.example.playludo.models.AppConstant.POLL_8_BALL;
-import static com.example.playludo.models.AppConstant.PUB_G;
-import static com.example.playludo.models.AppConstant.SIMPLE_JAKARTHA;
+import static com.example.playludo.utils.AppConstant.GAME_TYPE;
+import static com.example.playludo.utils.AppConstant.SIMPLE_JAKARTHA;
 
 
 public class PoolGameListFragment extends Fragment {
@@ -61,9 +56,6 @@ public class PoolGameListFragment extends Fragment {
     private List<HomeScreenModel> getHomeList() {
         List<HomeScreenModel> screenModels = new ArrayList<>();
         screenModels.add(new HomeScreenModel(R.drawable.pool_jakarta, SIMPLE_JAKARTHA));
-     /*   screenModels.add(new HomeScreenModel(R.drawable.pool_image, POLL_8_BALL));
-        screenModels.add(new HomeScreenModel(R.drawable.pubg_image, PUB_G));
-        screenModels.add(new HomeScreenModel(R.drawable.frefire_image, FREE_FIRE));*/
         return screenModels;
     }
 

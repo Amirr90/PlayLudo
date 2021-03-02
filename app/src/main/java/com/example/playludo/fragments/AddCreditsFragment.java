@@ -2,21 +2,19 @@ package com.example.playludo.fragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.playludo.PaymentUtils.PaymentCallback;
 import com.example.playludo.PaymentUtils.StartPayment;
@@ -26,27 +24,20 @@ import com.example.playludo.databinding.SubmitBidDialogViewBinding;
 import com.example.playludo.interfaces.WithdrawInterface;
 import com.example.playludo.models.AddCredits;
 import com.example.playludo.models.TransactionModel;
+import com.example.playludo.utils.AppConstant;
 import com.example.playludo.utils.AppUtils;
-import com.example.playludo.utils.Bid;
 import com.example.playludo.utils.Utils;
 import com.example.playludo.utils.WithdrawAmount;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
-import com.razorpay.PaymentData;
-import com.razorpay.PaymentResultWithDataListener;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.playludo.fragments.BidDetailsFragment.TRANSACTIONS;
 import static com.example.playludo.utils.Utils.getUid;
 import static com.example.playludo.utils.WithdrawAmount.ON_HOLD_FOR_WITHDRAW;
-import static com.example.playludo.utils.WithdrawAmount.WITHDRAW_REQUEST_QUERY;
 
 
 public class AddCreditsFragment extends Fragment {
@@ -251,16 +242,16 @@ public class AddCreditsFragment extends Fragment {
             updateTransactions();
         }).addOnFailureListener(e -> {
             AppUtils.hideDialog();
-            Toast.makeText(requireActivity(), "Error While Adding money!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireActivity(), "Error While Adding money !!", Toast.LENGTH_SHORT).show();
         });
     }
 
     private void updateTransactions() {
 
-        Utils.getFireStoreReference().collection(TRANSACTIONS).document().set(getTransactionModel(amount)).addOnSuccessListener(new OnSuccessListener<Void>() {
+        Utils.getFireStoreReference().collection(AppConstant.TRANSACTIONS).document().set(getTransactionModel(amount)).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(requireActivity(), "Payment Completed Successfully !!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), "Payment Completed Successfully !!", Toast.LENGTH_SHORT).show();
                 navController.navigate(R.id.action_addCreditsFragment_to_addedSuccesssfullyFragment);
             }
         }).addOnFailureListener(e -> Toast.makeText(requireActivity(), "something went wrong !!", Toast.LENGTH_SHORT).show());

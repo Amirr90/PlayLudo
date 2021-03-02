@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.playludo.interfaces.ApiCallbackInterface;
 import com.example.playludo.interfaces.BidInterface;
 import com.example.playludo.models.AddCredits;
+import com.example.playludo.models.BidModel;
 import com.example.playludo.models.TransactionModel;
 import com.example.playludo.models.User;
+import com.google.android.gms.common.util.SharedPreferencesUtils;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -17,9 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.example.playludo.fragments.AddCreditsFragment.USERS_QUERY;
-import static com.example.playludo.fragments.BidDetailsFragment.TRANSACTIONS;
-import static com.example.playludo.fragments.BidDetailsFragment.TYPE_DEBIT;
-import static com.example.playludo.utils.Utils.getUid;
+
 
 public class Bid extends AddCredits {
     private static final String TAG = "Bid";
@@ -41,6 +42,10 @@ public class Bid extends AddCredits {
     public Bid(Activity activity, String name) {
         this.activity = activity;
         this.name = name;
+    }
+
+    public Bid(Activity activity) {
+        this.activity = activity;
     }
 
     public void start(BidInterface bidInterface, String gameId, String gameName) {
@@ -92,7 +97,7 @@ public class Bid extends AddCredits {
         batch.set(sfRef, bidMap);
 
         // Create Transaction of User
-        DocumentReference transRef = db.collection(TRANSACTIONS).document();
+        DocumentReference transRef = db.collection(AppConstant.TRANSACTIONS).document();
         batch.set(transRef, getTransactionModel(String.valueOf(amount)));
 
         // Commit the batch
@@ -111,7 +116,21 @@ public class Bid extends AddCredits {
         transactionModel.setAmount(bidAmount);
         transactionModel.setUid(getUid());
         transactionModel.setTimestamp(System.currentTimeMillis());
-        transactionModel.setType(TYPE_DEBIT);
+        transactionModel.setType(AppConstant.TYPE_DEBIT);
         return transactionModel;
+    }
+
+    public void loss(BidModel bidModel, ApiCallbackInterface apiCallbackInterface) {
+        ApiUtils.updateBidStatus(bidModel, new ApiCallbackInterface() {
+            @Override
+            public void onSuccess(Object obj) {
+                apiCallbackInterface.onSuccess(obj);
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                apiCallbackInterface.onFailed(msg);
+            }
+        });
     }
 }

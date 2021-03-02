@@ -35,7 +35,7 @@
     <fragment
         android:id="@+id/bidDetailsFragment"
         android:name="com.example.playludo.fragments.BidDetailsFragment"
-        android:label="fragment_bid_details"
+        android:label="BId Details"
         tools:layout="@layout/fragment_bid_details" />
     <fragment
         android:id="@+id/addCreditsFragment"
@@ -101,12 +101,19 @@
         tools:layout="@layout/fragment_transaction" />
     <fragment
         android:id="@+id/myBidsListFragment"
-        android:name="com.example.playludo.MyBidsListFragment"
+        android:name="com.example.playludo.fragments.MyBidsListFragment"
         android:label="My Bids"
-        tools:layout="@layout/fragment_my_bids_list" />
+        tools:layout="@layout/fragment_my_bids_list" >
+        <action
+            android:id="@+id/action_myBidsListFragment_to_bidDetailsFragment"
+            app:destination="@id/bidDetailsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in" />
+    </fragment>
     <fragment
         android:id="@+id/poolGameListFragment"
-        android:name="com.example.playludo.PoolGameListFragment"
+        android:name="com.example.playludo.fragments.PoolGameListFragment"
         android:label="Pool"
         tools:layout="@layout/fragment_pool_game_list" >
         <action

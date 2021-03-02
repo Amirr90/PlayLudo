@@ -1,4 +1,4 @@
-package com.example.playludo;
+package com.example.playludo.fragments;
 
 import android.os.Bundle;
 
@@ -17,14 +17,10 @@ import com.example.playludo.adapter.MyBidsAdapter;
 import com.example.playludo.databinding.FragmentMyBidsListBinding;
 import com.example.playludo.utils.AppUtils;
 import com.example.playludo.utils.Utils;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -43,11 +43,7 @@ import java.util.Objects;
 
 import static com.example.playludo.fragments.AddCreditsFragment.USERS_QUERY;
 import static com.example.playludo.fragments.BidFragment.GAME_IMAGE;
-import static com.example.playludo.models.AppConstant.FREE_FIRE;
-import static com.example.playludo.models.AppConstant.GAME_TYPE;
-import static com.example.playludo.models.AppConstant.LUDO_KING;
-import static com.example.playludo.models.AppConstant.POLL_8_BALL;
-import static com.example.playludo.models.AppConstant.PUB_G;
+import static com.example.playludo.utils.AppConstant.*;
 import static com.example.playludo.utils.Utils.getUid;
 
 public class AppDashboardFragment extends Fragment {

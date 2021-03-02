@@ -22,7 +22,7 @@ import java.util.Map;
 
 import static com.example.playludo.fragments.AddCreditsFragment.CREDITS;
 import static com.example.playludo.fragments.AddCreditsFragment.USERS_QUERY;
-import static com.example.playludo.fragments.BidDetailsFragment.TRANSACTIONS;
+
 import static com.example.playludo.utils.Utils.getUid;
 
 public class WithdrawAmount {
@@ -77,7 +77,7 @@ public class WithdrawAmount {
         batch.update(sfRef, userMap);
 
         // Create Transaction of User
-        DocumentReference transRef = db.collection(TRANSACTIONS).document();
+        DocumentReference transRef = db.collection(AppConstant.TRANSACTIONS).document();
         batch.set(transRef, getTransactionModel(String.valueOf(credits)));
 
         // Commit the batch

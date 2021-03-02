@@ -15,6 +15,15 @@ public class BidModel {
     String gameStatus;
     String image;
     String resultUploadedBy;
+    String playerTwoUniqueId;
+
+    public String getPlayerTwoUniqueId() {
+        return playerTwoUniqueId;
+    }
+
+    public void setPlayerTwoUniqueId(String playerTwoUniqueId) {
+        this.playerTwoUniqueId = playerTwoUniqueId;
+    }
 
     public String getResultUploadedBy() {
         return resultUploadedBy;

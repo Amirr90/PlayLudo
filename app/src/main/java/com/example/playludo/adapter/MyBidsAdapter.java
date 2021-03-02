@@ -2,18 +2,20 @@ package com.example.playludo.adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.playludo.MyBidsListFragment;
+import com.example.playludo.HomeScreen;
+import com.example.playludo.fragments.MyBidsListFragment;
+import com.example.playludo.R;
 import com.example.playludo.databinding.MyBidsViewBinding;
 import com.example.playludo.models.TransactionModel;
+import com.example.playludo.utils.AppConstant;
 import com.example.playludo.utils.AppUtils;
 import com.example.playludo.utils.Utils;
 import com.google.firebase.firestore.DocumentReference;
@@ -30,8 +32,9 @@ import static com.example.playludo.fragments.AddCreditsFragment.CREDITS;
 import static com.example.playludo.fragments.AddCreditsFragment.INVEST;
 import static com.example.playludo.fragments.AddCreditsFragment.TYPE_CREDIT;
 import static com.example.playludo.fragments.AddCreditsFragment.USERS_QUERY;
-import static com.example.playludo.fragments.BidDetailsFragment.TRANSACTIONS;
+
 import static com.example.playludo.fragments.BidFragment.BID_AMOUNT;
+import static com.example.playludo.fragments.BidFragment.BID_ID;
 import static com.example.playludo.fragments.BidFragment.BID_QUERY;
 import static com.example.playludo.utils.Bid.BID_STATUS;
 import static com.example.playludo.utils.Bid.IS_ACTIVE;
@@ -75,6 +78,11 @@ public class MyBidsAdapter extends RecyclerView.Adapter<MyBidsAdapter.BidsVH> {
                 showCancelBidDialog(snapshot);
             }
         });
+        holder.binding.getRoot().setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString(BID_ID, snapshot.getId());
+            HomeScreen.getInstance().navigate(R.id.action_myBidsListFragment_to_bidDetailsFragment, bundle);
+        });
     }
 
     private void showCancelBidDialog(DocumentSnapshot snapshot) {
@@ -100,20 +108,22 @@ public class MyBidsAdapter extends RecyclerView.Adapter<MyBidsAdapter.BidsVH> {
         map.put(IS_ACTIVE, false);
         batch.update(nycRef, map);
 
-        // Credits user's Wallet
-        DocumentReference sfRef = db.collection(USERS_QUERY).document(getUid());
-        Map<String, Object> userMap = new HashMap<>();
-        userMap.put(CREDITS, FieldValue.increment(Long.parseLong(snapshot.getString(BID_AMOUNT))));
-        userMap.put(INVEST, FieldValue.increment(-Long.parseLong(snapshot.getString(BID_AMOUNT))));
-        batch.update(sfRef, userMap);
+
+        // batch.update(sfRef, userMap);
 
         // Create Transaction of User
-        DocumentReference transRef = db.collection(TRANSACTIONS).document();
+        DocumentReference transRef = db.collection(AppConstant.TRANSACTIONS).document();
         batch.set(transRef, getTransactionModel(snapshot.getString(BID_AMOUNT)));
 
         // Commit the batch
         batch.commit().addOnSuccessListener(aVoid -> {
             AppUtils.hideDialog();
+            // Credits user's Wallet
+            DocumentReference sfRef = db.collection(USERS_QUERY).document(getUid());
+            Map<String, Object> userMap = new HashMap<>();
+            userMap.put(CREDITS, FieldValue.increment(Long.parseLong(snapshot.getString(BID_AMOUNT))));
+            userMap.put(INVEST, FieldValue.increment(-Long.parseLong(snapshot.getString(BID_AMOUNT))));
+            sfRef.update(userMap);
             Toast.makeText(activity, "Money refunded to wallet successfully !!", Toast.LENGTH_SHORT).show();
             MyBidsListFragment.getInstance().loadBidsListData();
         }).addOnFailureListener(e -> Toast.makeText(activity, "try again !!", Toast.LENGTH_SHORT).show());

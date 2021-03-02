@@ -20,6 +20,7 @@
     <string name="notifications">Notifications</string>
     <string name="msg_subscribed">subsscribed to newBid !!</string>
     <string name="msg_subscribe_failed">subscribe to newBids failed !!</string>
+    <string name="enter_your_name">Enter Your name</string>
 
     <string-array name="game_name_array">
         <item>Cappuccino</item>

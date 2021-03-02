@@ -26,7 +26,18 @@ public class AppUtils {
     private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
     private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
 
-    public static String getFormatedAmount(int amount){
+
+    public static String getIdHintText(String gameType) {
+        if (gameType.equalsIgnoreCase(AppConstant.LUDO_KING))
+            return "Enter Game ID";
+        else if (gameType.equalsIgnoreCase(AppConstant.SIMPLE_JAKARTHA))
+            return "Enter 8 Ball Pool Unique Id here";
+        else return "";
+
+    }
+
+
+    public static String getFormatedAmount(int amount) {
         return NumberFormat.getNumberInstance(Locale.US).format(amount);
     }
 
