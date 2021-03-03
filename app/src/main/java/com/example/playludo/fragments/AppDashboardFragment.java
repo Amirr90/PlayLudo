@@ -28,6 +28,13 @@ import com.example.playludo.models.User;
 import com.example.playludo.utils.AppUtils;
 import com.example.playludo.utils.Bid;
 import com.example.playludo.utils.Utils;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -59,6 +66,7 @@ public class AppDashboardFragment extends Fragment {
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAppDashboardBinding.inflate(getLayoutInflater());
+        initAds();
         return binding.getRoot();
     }
 
@@ -69,6 +77,57 @@ public class AppDashboardFragment extends Fragment {
         binding.homeRec.setAdapter(new HomeAdapter(getHomeList()));
         checkForUsername();
         subscribeToNewBidsTopic();
+        setBannerAdd();
+
+
+    }
+
+    private void setBannerAdd() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        binding.adView.loadAd(adRequest);
+        binding.adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                Log.d(TAG, "onAdLoaded: ");
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+                Log.d(TAG, "onAdFailedToLoad: ");
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+                Log.d(TAG, "onAdOpened: ");
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+                Log.d(TAG, "onAdClicked: ");
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+                Log.d(TAG, "onAdLeftApplication: ");
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+                Log.d(TAG, "onAdClosed: ");
+            }
+        });
+    }
+
+    private void initAds() {
+        MobileAds.initialize(requireActivity(), initializationStatus -> Log.d(TAG, "onInitializationComplete: " + initializationStatus));
     }
 
     private void subscribeToNewBidsTopic() {

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -36,10 +35,14 @@ import com.example.playludo.utils.AppUtils;
 import com.example.playludo.utils.Bid;
 import com.example.playludo.utils.Utils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.common.api.Batch;
-import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -56,9 +59,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.example.playludo.fragments.AddCreditsFragment.USERS_QUERY;
-import static com.example.playludo.fragments.BidFragment.BID_ID;
 import static com.example.playludo.fragments.BidFragment.BID_QUERY;
-import static com.example.playludo.fragments.BidFragment.GAME_IMAGE;
 import static com.example.playludo.utils.AppConstant.BID_ACCEPTED_BY;
 import static com.example.playludo.utils.AppConstant.BID_ACCEPTER_NAME;
 import static com.example.playludo.utils.AppConstant.BID_ACCEPT_TIMESTAMP;
@@ -81,15 +82,24 @@ public class BidDetailsFragment extends Fragment {
     FragmentBidDetailsBinding bidDetailsBinding;
     String bidId = null;
     ProgressDialog progressDialog;
-    // int gameImage;
     BidModel bidModel;
     AlertDialog optionDialog;
+
+    private InterstitialAd mInterstitialAd;
+    AdRequest adRequest;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        bidDetailsBinding = FragmentBidDetailsBinding.inflate(getLayoutInflater());
+        initAdd();
         return bidDetailsBinding.getRoot();
+    }
+
+    private void initAdd() {
+        bidDetailsBinding = FragmentBidDetailsBinding.inflate(getLayoutInflater());
+        MobileAds.initialize(requireActivity(), initializationStatus -> {
+        });
+        adRequest = new AdRequest.Builder().build();
     }
 
     @Override
@@ -108,7 +118,11 @@ public class BidDetailsFragment extends Fragment {
         Log.d(TAG, "onViewCreated: BidId " + bidId);
         getBidData();
 
-        bidDetailsBinding.btnAccept.setOnClickListener(v -> showAlertDialog(bidDetailsBinding.tvBidingAmount.getText().toString()));
+        bidDetailsBinding.btnAccept.setOnClickListener(v -> {
+            AppUtils.showRequestDialog(requireActivity());
+            showInterstitialAd(bidDetailsBinding.tvBidingAmount.getText().toString());
+
+        });
         bidDetailsBinding.btnWin.setOnClickListener(v -> {
             selectImage();
         });
@@ -125,6 +139,56 @@ public class BidDetailsFragment extends Fragment {
             AppUtils.showRequestDialog(requireActivity());
             sendShareContact();
         });
+    }
+
+    private void showInterstitialAd(String s) {
+        InterstitialAd.load(requireActivity(), "ca-app-pub-3940256099942544/1033173712", adRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+
+
+                AppUtils.hideDialog();
+                mInterstitialAd = interstitialAd;
+                Log.i(TAG, "onAdLoaded");
+                mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                    @Override
+                    public void onAdDismissedFullScreenContent() {
+                        Log.d("TAG", "The ad was dismissed.");
+                        showAlertDialog(s);
+
+                    }
+
+                    @Override
+                    public void onAdFailedToShowFullScreenContent(AdError adError) {
+                        Log.d("TAG", "The ad failed to show.");
+                        showAlertDialog(s);
+
+                    }
+
+                    @Override
+                    public void onAdShowedFullScreenContent() {
+                        mInterstitialAd = null;
+                        Log.d("TAG", "The ad was shown.");
+                        showAlertDialog(s);
+                    }
+                });
+                if (mInterstitialAd != null) {
+                    mInterstitialAd.show(requireActivity());
+                } else {
+                    Log.d("TAG", "The interstitial ad wasn't ready yet.");
+                }
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                // Handle the error
+                Log.i(TAG, loadAdError.getMessage());
+                mInterstitialAd = null;
+                AppUtils.hideDialog();
+            }
+        });
+
+
     }
 
     private void sendShareContact() {
@@ -253,9 +317,7 @@ public class BidDetailsFragment extends Fragment {
                         openRequestUniqueIdDialog();
                     } else acceptBid("");
 
-                }).setNegativeButton("No", (dialog, which) -> {
-
-        }).show();
+                }).setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
 
     }
 

@@ -10,6 +10,8 @@ public class AppConstant {
     public static final String TRANSACTIONS = "Transactions";
     public static final String TYPE_DEBIT = "debit";
 
+
+    //game Mode
     public static final String LUDO_KING = "Ludo King";
     public static final String POLL_8_BALL = "8 Ball Pool by miniclip";
     public static final String PUB_G = "PubG";

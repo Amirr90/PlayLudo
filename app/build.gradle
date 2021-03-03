@@ -79,5 +79,8 @@ dependencies {
     apply plugin: "androidx.navigation.safeargs"
 
 
+    implementation 'com.google.android.gms:play-services-ads:19.7.0'
+
+
 
 }
