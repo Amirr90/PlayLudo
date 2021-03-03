@@ -1,5 +1,7 @@
 package com.example.playludo.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +28,11 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.example.playludo.fragments.BidFragment.GAME_IMAGE;
+import static com.example.playludo.utils.AppConstant.ALL_INDIRECT;
+import static com.example.playludo.utils.AppConstant.ALL_INDIRECT_BLACK_DOUBLE;
 import static com.example.playludo.utils.AppConstant.GAME_TYPE;
 import static com.example.playludo.utils.AppConstant.SIMPLE_JAKARTHA;
+import static com.example.playludo.utils.AppConstant.VENICE_RULE;
 
 
 public class PoolGameListFragment extends Fragment {
@@ -56,6 +61,9 @@ public class PoolGameListFragment extends Fragment {
     private List<HomeScreenModel> getHomeList() {
         List<HomeScreenModel> screenModels = new ArrayList<>();
         screenModels.add(new HomeScreenModel(R.drawable.pool_jakarta, SIMPLE_JAKARTHA));
+        screenModels.add(new HomeScreenModel(R.drawable.pool_jakarta, VENICE_RULE));
+        screenModels.add(new HomeScreenModel(R.drawable.pool_jakarta, ALL_INDIRECT));
+        screenModels.add(new HomeScreenModel(R.drawable.pool_jakarta, ALL_INDIRECT_BLACK_DOUBLE));
         return screenModels;
     }
 
@@ -86,7 +94,7 @@ public class PoolGameListFragment extends Fragment {
                     bundle.putString(GAME_TYPE, homeScreenModel.getTitle());
                     bundle.putInt(GAME_IMAGE, homeScreenModel.getImage());
                     navController.navigate(R.id.action_poolGameListFragment_to_dashboardFragment, bundle);
-                } else Toast.makeText(requireActivity(), "Coming Soon", Toast.LENGTH_SHORT).show();
+                } else showComingSoonDialog();
             });
         }
 
@@ -105,6 +113,15 @@ public class PoolGameListFragment extends Fragment {
                 this.viewBinding = viewBinding;
             }
         }
+    }
+
+    private void showComingSoonDialog() {
+        new AlertDialog.Builder(requireActivity()).setTitle("Coming Soon").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
     }
 
     @Override

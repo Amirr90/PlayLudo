@@ -16,5 +16,9 @@ public class AppConstant {
     public static final String FREE_FIRE = "FreeFire";
     public static final String GAME_TYPE = "gameType";
     public static final String SIMPLE_JAKARTHA = "Simple Jakarta";
+    public static final String VENICE_RULE = "Venice Rule";
+    public static final String ALL_INDIRECT = "All Indirect";
+    public static final String ALL_INDIRECT_BLACK_DOUBLE = "All Indirect Black Double";
+
 
 }
