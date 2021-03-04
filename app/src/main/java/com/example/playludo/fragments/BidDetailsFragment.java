@@ -128,7 +128,8 @@ public class BidDetailsFragment extends Fragment {
             selectImage();
         });
 
-        bidDetailsBinding.btnLoss.setOnClickListener(v -> new AlertDialog.Builder(requireActivity()).setMessage("Confirm to update Loss??")
+        bidDetailsBinding.btnLoss.setOnClickListener(v ->
+                new AlertDialog.Builder(requireActivity()).setMessage("Confirm to update Loss??")
                 .setPositiveButton("Yes", (dialog, which) -> updateAsLoos()).setNegativeButton("No", (dialog, which) -> {
                 }).show());
 
