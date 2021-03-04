@@ -17,7 +17,24 @@ public class BidModel {
     String resultUploadedBy;
     String playerTwoUniqueId;
     String contactDetails;
+    String winner;
+    String loser;
 
+    public String getWinner() {
+        return winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
+
+    public String getLoser() {
+        return loser;
+    }
+
+    public void setLoser(String loser) {
+        this.loser = loser;
+    }
 
     public String getContactDetails() {
         return contactDetails;
@@ -147,6 +164,8 @@ public class BidModel {
                 ", timestamp=" + timestamp +
                 '}';
     }
+
+
 
     public void setName(String name) {
         this.name = name;

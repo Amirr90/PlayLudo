@@ -29,9 +29,9 @@ public class AppUtils {
 
     public static String getIdHintText(String gameType) {
         if (gameType.equalsIgnoreCase(AppConstant.LUDO_KING))
-            return "Enter Game ID";
+            return "Enter Room  Code";
         else if (gameType.equalsIgnoreCase(AppConstant.SIMPLE_JAKARTHA))
-            return "Enter 8 Ball Pool Unique Id here";
+            return "Enter 8 Ball Pool Unique Id Here";
         else return "";
 
     }

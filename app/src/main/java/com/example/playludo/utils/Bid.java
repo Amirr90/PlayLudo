@@ -38,10 +38,12 @@ public class Bid extends AddCredits {
     Activity activity;
     BidInterface bidInterface;
     String gameId, gameName, name;
+    String bidId;
 
     public Bid(Activity activity, String name) {
         this.activity = activity;
         this.name = name;
+        bidId = String.valueOf(System.currentTimeMillis());
     }
 
     public Bid(Activity activity) {
@@ -80,6 +82,7 @@ public class Bid extends AddCredits {
         Map<String, Object> map = new HashMap<>();
         map.put("credits", FieldValue.increment(-Long.parseLong(amount)));
         map.put("invest", FieldValue.increment(Long.parseLong(amount)));
+        map.put("onHold", FieldValue.increment(Long.parseLong(amount)));
         batch.update(nycRef, map);
 
         //2. Create new BID request
@@ -92,8 +95,8 @@ public class Bid extends AddCredits {
         bidMap.put(GAME_ID, gameId);
         bidMap.put(IS_ACTIVE, true);
         bidMap.put(GAME_NAME, gameName);
-        bidMap.put("bidId", "" + System.currentTimeMillis());
-        DocumentReference sfRef = db.collection(BIDS).document();
+        bidMap.put("bidId", bidId);
+        DocumentReference sfRef = db.collection(BIDS).document(bidId);
         batch.set(sfRef, bidMap);
 
         // Create Transaction of User
@@ -121,6 +124,7 @@ public class Bid extends AddCredits {
     }
 
     public void loss(BidModel bidModel, ApiCallbackInterface apiCallbackInterface) {
+        Log.d(TAG, "loss: calling Bids Apis");
         ApiUtils.updateBidStatus(bidModel, new ApiCallbackInterface() {
             @Override
             public void onSuccess(Object obj) {

@@ -22,6 +22,7 @@
     <string name="msg_subscribe_failed">subscribe to newBids failed !!</string>
     <string name="enter_your_name">Enter Your name</string>
     <string name="contact_details">Contact Details</string>
+    <string name="accepted_by">Accepted By</string>
 
     <string-array name="game_name_array">
         <item>Cappuccino</item>

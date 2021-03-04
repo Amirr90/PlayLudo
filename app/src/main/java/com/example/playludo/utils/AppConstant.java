@@ -23,4 +23,5 @@ public class AppConstant {
     public static final String ALL_INDIRECT_BLACK_DOUBLE = "All Indirect Black Double";
 
 
+    public static final String CLOSED = "closed";
 }

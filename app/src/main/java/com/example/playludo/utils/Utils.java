@@ -27,6 +27,8 @@ public class Utils {
 
     public static List<BidModel> getBidPriceList() {
         List<BidModel> bidModels = new ArrayList<>();
+
+        bidModels.add(new BidModel("All"));
         bidModels.add(new BidModel("50"));
         bidModels.add(new BidModel("100"));
         bidModels.add(new BidModel("200"));

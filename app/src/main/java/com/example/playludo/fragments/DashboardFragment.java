@@ -96,6 +96,7 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
     }
 
     private void setDashboardRecData() {
+
         dashboardBinding.priceTab.setAdapter(new PriceAdapter(Utils.getBidPriceList()));
 
         bidAdapter = new BidAdapter(bidModels, this);
@@ -224,42 +225,80 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
 
     public void setBidRecData(int position) {
         AppUtils.showRequestDialog(requireActivity());
-        String bidAmount = Utils.getBidPrice(position);
-        getFireStoreReference().collection(BID_QUERY)
-                .whereEqualTo(BID_AMOUNT, bidAmount)
-                .whereEqualTo(GAME_NAME, gameType)
-                .whereEqualTo(IS_ACTIVE, true)
-                .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
-                .limit(30)
-                .addSnapshotListener((queryDocumentSnapshots, e) -> {
-                    AppUtils.hideDialog();
-                    if (null != e) {
-                        Log.d(TAG, "setBidRecData: " + e.getLocalizedMessage());
-                        Toast.makeText(requireActivity(), "something went wrong, try again", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (null == queryDocumentSnapshots) {
-                        Toast.makeText(requireActivity(), "something went wrong, try again", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    List<DocumentChange> snapshotList = queryDocumentSnapshots.getDocumentChanges();
-                    Log.d(TAG, "loadBidData: " + snapshotList.size());
-                    bidModels.clear();
-
-                    int active = 0;
-                    int paired = 0;
-                    for (DocumentChange snapshot : snapshotList)
-                        if (snapshot.getType() == DocumentChange.Type.ADDED) {
-                            BidModel bidModel = snapshot.getDocument().toObject(BidModel.class);
-                            bidModel.setBidId(snapshot.getDocument().getId());
-                            bidModels.add(bidModel);
-                            if (!bidModel.isBidStatus())
-                                active++;
-                            else paired++;
+        if (position == 0) {
+            getFireStoreReference().collection(BID_QUERY)
+                    //.whereEqualTo(BID_AMOUNT, bidAmount)
+                    .whereEqualTo(GAME_NAME, gameType)
+                    .whereEqualTo(IS_ACTIVE, true)
+                    .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
+                    .limit(30)
+                    .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                        AppUtils.hideDialog();
+                        if (null != e) {
+                            Log.d(TAG, "setBidRecData: " + e.getLocalizedMessage());
+                            Toast.makeText(requireActivity(), "something went wrong, try again", Toast.LENGTH_SHORT).show();
+                            return;
                         }
-                    bidAdapter.notifyDataSetChanged();
-                    updateActiveCounter(active, paired);
-                });
+                        if (null == queryDocumentSnapshots) {
+                            Toast.makeText(requireActivity(), "something went wrong, try again", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        List<DocumentChange> snapshotList = queryDocumentSnapshots.getDocumentChanges();
+                        Log.d(TAG, "loadBidData: " + snapshotList.size());
+                        bidModels.clear();
+
+                        int active = 0;
+                        int paired = 0;
+                        for (DocumentChange snapshot : snapshotList)
+                            if (snapshot.getType() == DocumentChange.Type.ADDED) {
+                                BidModel bidModel = snapshot.getDocument().toObject(BidModel.class);
+                                bidModel.setBidId(snapshot.getDocument().getId());
+                                bidModels.add(bidModel);
+                                if (!bidModel.isBidStatus())
+                                    active++;
+                                else paired++;
+                            }
+                        bidAdapter.notifyDataSetChanged();
+                        updateActiveCounter(active, paired);
+                    });
+        } else {
+            String bidAmount = Utils.getBidPrice(position);
+            getFireStoreReference().collection(BID_QUERY)
+                    .whereEqualTo(BID_AMOUNT, bidAmount)
+                    .whereEqualTo(GAME_NAME, gameType)
+                    .whereEqualTo(IS_ACTIVE, true)
+                    .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
+                    .limit(30)
+                    .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                        AppUtils.hideDialog();
+                        if (null != e) {
+                            Log.d(TAG, "setBidRecData: " + e.getLocalizedMessage());
+                            Toast.makeText(requireActivity(), "something went wrong, try again", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (null == queryDocumentSnapshots) {
+                            Toast.makeText(requireActivity(), "something went wrong, try again", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        List<DocumentChange> snapshotList = queryDocumentSnapshots.getDocumentChanges();
+                        Log.d(TAG, "loadBidData: " + snapshotList.size());
+                        bidModels.clear();
+
+                        int active = 0;
+                        int paired = 0;
+                        for (DocumentChange snapshot : snapshotList)
+                            if (snapshot.getType() == DocumentChange.Type.ADDED) {
+                                BidModel bidModel = snapshot.getDocument().toObject(BidModel.class);
+                                bidModel.setBidId(snapshot.getDocument().getId());
+                                bidModels.add(bidModel);
+                                if (!bidModel.isBidStatus())
+                                    active++;
+                                else paired++;
+                            }
+                        bidAdapter.notifyDataSetChanged();
+                        updateActiveCounter(active, paired);
+                    });
+        }
     }
 
     @Override

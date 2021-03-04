@@ -63,6 +63,7 @@ import static com.example.playludo.fragments.BidFragment.BID_QUERY;
 import static com.example.playludo.utils.AppConstant.BID_ACCEPTED_BY;
 import static com.example.playludo.utils.AppConstant.BID_ACCEPTER_NAME;
 import static com.example.playludo.utils.AppConstant.BID_ACCEPT_TIMESTAMP;
+import static com.example.playludo.utils.AppConstant.CLOSED;
 import static com.example.playludo.utils.AppConstant.GAME_STATUS;
 import static com.example.playludo.utils.AppConstant.PLAYER_TWO_UNIQUE_ID;
 import static com.example.playludo.utils.AppConstant.TRANSACTIONS;
@@ -186,6 +187,7 @@ public class BidDetailsFragment extends Fragment {
                 mInterstitialAd = null;
                 AppUtils.hideDialog();
             }
+
         });
 
 
@@ -205,18 +207,23 @@ public class BidDetailsFragment extends Fragment {
     }
 
     private void updateAsLoos() {
+        AppUtils.showRequestDialog(requireActivity());
         Bid bid = new Bid(requireActivity());
         BidModel bidModel = new BidModel();
         bidModel.setBidId(bidId);
+        bidModel.setUid(getUid());
         bid.loss(bidModel, new ApiCallbackInterface() {
             @Override
             public void onSuccess(Object obj) {
-                Toast.makeText(requireActivity(), "updated Successfully !!", Toast.LENGTH_SHORT).show();
+                AppUtils.hideDialog();
+
+                Toast.makeText(requireActivity(), (String) obj, Toast.LENGTH_SHORT).show();
                 getBidData();
             }
 
             @Override
             public void onFailed(String msg) {
+                AppUtils.hideDialog();
                 Toast.makeText(requireActivity(), msg, Toast.LENGTH_SHORT).show();
             }
         });
@@ -245,8 +252,6 @@ public class BidDetailsFragment extends Fragment {
     private void selectImage() {
 
         ImagePicker.Companion.with(this)
-
-                //Crop image(Optional), Check Customization for more option
                 .compress(512)//Final image size will be less than 1 MB(Optional)
                 .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
                 .start();
@@ -393,6 +398,7 @@ public class BidDetailsFragment extends Fragment {
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("credits", FieldValue.increment(-Long.parseLong(bidAmount)));
         userMap.put("onHold", FieldValue.increment(Long.parseLong(bidAmount)));
+        userMap.put("invest", FieldValue.increment(Long.parseLong(bidAmount)));
         batch.update(userRef, userMap);
 
         // Update the Bids Status
@@ -458,7 +464,7 @@ public class BidDetailsFragment extends Fragment {
 
                         if (null != bidModel.getBidAcceptBy())
                             if (bidModel.getUid().equals(getUid()) || bidModel.getBidAcceptBy().equals(getUid())) {
-                                if (null == bidModel.getImage())
+                                if (!bidModel.getGameStatus().equals(CLOSED))
                                     bidDetailsBinding.resultLay.setVisibility(View.VISIBLE);
                                 else bidDetailsBinding.resultLay.setVisibility(View.GONE);
 
@@ -469,6 +475,12 @@ public class BidDetailsFragment extends Fragment {
 
                                 bidDetailsBinding.btnRequestContact.setVisibility(bidModel.getUid().equals(getUid()) ? View.VISIBLE : View.GONE);
 
+                                if (bidModel.getGameStatus().equals(AppConstant.CLOSED)) {
+                                    if (null != bidModel.getWinner())
+                                        if (bidModel.getWinner().equals(getUid()))
+                                            bidDetailsBinding.textView18.setText("Yow Won !!\n\n\nAmount Credits to your wallet successfully !!");
+                                        else bidDetailsBinding.textView18.setText("Yow Loss !!");
+                                }
 
                             } else Log.d(TAG, "getBidData: Bidder ID and AccepterID not Same");
                         else Log.d(TAG, "getBidData: null");

@@ -5,11 +5,13 @@ import com.example.playludo.responseModel.BidRes;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface Api {
 
-    @POST("updateBidStatus")
-    Call<BidRes> updateBidStatus(@Body BidModel dashboard);
+    @GET("updateBIdStatus")
+    Call<BidRes> updateBidStatus(@Query("uid") String uid, @Query("bidId") String bidId);
 
 }
