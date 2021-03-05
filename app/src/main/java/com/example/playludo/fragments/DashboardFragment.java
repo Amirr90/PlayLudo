@@ -227,7 +227,6 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
         AppUtils.showRequestDialog(requireActivity());
         if (position == 0) {
             getFireStoreReference().collection(BID_QUERY)
-                    //.whereEqualTo(BID_AMOUNT, bidAmount)
                     .whereEqualTo(GAME_NAME, gameType)
                     .whereEqualTo(IS_ACTIVE, true)
                     .orderBy(TIMESTAMP, Query.Direction.DESCENDING)

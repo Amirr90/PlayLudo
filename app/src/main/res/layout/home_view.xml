@@ -37,11 +37,13 @@
                 app:srcCompat="@drawable/ic_baseline_double_arrow_24" />
 
             <ImageView
-                android:loadCustomImage="@{homeModel.image}"
+                android:scaleType="fitXY"
                 android:id="@+id/imageView"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="16dp"
+                android:loadCustomImage="@{homeModel.image}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/fui_ic_googleg_color_24dp" />
@@ -53,8 +55,10 @@
                 android:layout_marginStart="16dp"
                 android:fontFamily="@font/poppins_medium"
                 android:text="@{homeModel.title,default=`Ludo`}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="#676767"
                 android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView" />
 
@@ -63,6 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2,189 Bids"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@+id/textView2"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,6 +33,7 @@ public class WithdrawAmount {
     Activity activity;
     WithdrawInterface withdrawInterface;
 
+
     String tId = String.valueOf(System.currentTimeMillis());
 
     public WithdrawAmount(Activity activity, WithdrawInterface withdrawInterface) {
@@ -40,11 +41,11 @@ public class WithdrawAmount {
         this.withdrawInterface = withdrawInterface;
     }
 
-    public void start() {
-        checkAmount();
+    public void start(String amount) {
+        checkAmount(amount);
     }
 
-    private void checkAmount() {
+    private void checkAmount(String amount) {
         Utils.getFireStoreReference().collection(AddCreditsFragment.USERS_QUERY).document(getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -52,7 +53,7 @@ public class WithdrawAmount {
                     withdrawInterface.onFailed("unable to fetch user balance !!");
                     return;
                 }
-                submitRequest(documentSnapshot.getLong(CREDITS));
+                submitRequest(Long.valueOf(amount));
             }
         }).addOnFailureListener(e -> {
             withdrawInterface.onFailed(e.getLocalizedMessage());

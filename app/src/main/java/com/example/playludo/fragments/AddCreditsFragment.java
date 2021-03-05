@@ -2,6 +2,7 @@ package com.example.playludo.fragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.playludo.HomeScreen;
 import com.example.playludo.PaymentUtils.PaymentCallback;
 import com.example.playludo.PaymentUtils.StartPayment;
 import com.example.playludo.R;
@@ -28,14 +30,19 @@ import com.example.playludo.utils.AppConstant;
 import com.example.playludo.utils.AppUtils;
 import com.example.playludo.utils.Utils;
 import com.example.playludo.utils.WithdrawAmount;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.playludo.utils.Utils.getFireStoreReference;
 import static com.example.playludo.utils.Utils.getUid;
 import static com.example.playludo.utils.WithdrawAmount.ON_HOLD_FOR_WITHDRAW;
 
@@ -61,6 +68,7 @@ public class AddCreditsFragment extends Fragment {
     String amount = null;
     StartPayment startPayment;
     String tId;
+    String transactionId;
 
     AlertDialog optionDialog;
 
@@ -82,18 +90,54 @@ public class AddCreditsFragment extends Fragment {
         loadWalletAmount();
         addCreditsBinding.btnOk.setOnClickListener(v -> {
             amount = addCreditsBinding.etAmount.getText().toString();
-
-            if (TextUtils.isDigitsOnly(amount) && !TextUtils.isEmpty(amount)) {
-                if (Long.parseLong(amount) < 10) {
-                    Toast.makeText(requireActivity(), "Add amount should be greater than ₹10", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                tId = String.valueOf(System.currentTimeMillis());
-                initTransaction(tId);
+            transactionId = addCreditsBinding.etTransactionId.getText().toString();
+            if (TextUtils.isEmpty(amount)) {
+                Toast.makeText(requireActivity(), "Enter Amount !!", Toast.LENGTH_SHORT).show();
+                // tId = String.valueOf(System.currentTimeMillis());
+                // initTransaction(tId);
+            } else if (Long.parseLong(amount) < 10) {
+                Toast.makeText(requireActivity(), "Add amount should be greater than ₹10 !!", Toast.LENGTH_SHORT).show();
+            } else if (TextUtils.isEmpty(transactionId)) {
+                Toast.makeText(requireActivity(), "Enter Transaction Id !!", Toast.LENGTH_SHORT).show();
+            } else {
+                submitRequestToAddCredits();
             }
         });
         addCreditsBinding.btnWithdrawAmount.setOnClickListener(v -> showWithdrawAmountDialog());
+        addCreditsBinding.tvViewAllAddMoneyRequest.setOnClickListener(v -> navController.navigate(R.id.action_addCreditsFragment_to_addMoneyHistoryFragment));
 
+
+    }
+
+    private void submitRequestToAddCredits() {
+        AppUtils.hideSoftKeyboard(requireActivity());
+        AppUtils.showRequestDialog(requireActivity());
+        getFireStoreReference().collection(AppConstant.ADD_MONEY_REQUEST).document().set(getAddMoneyTransactionMap()).addOnSuccessListener(aVoid -> {
+            AppUtils.hideDialog();
+            showAlertDialog();
+        }).addOnFailureListener(e -> {
+            AppUtils.hideDialog();
+            Toast.makeText(requireActivity(), "try again !!", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void showAlertDialog() {
+        new AlertDialog.Builder(requireActivity()).setTitle("Success")
+                .setMessage("Your request to add ₹" + amount + " is submitted successfully\nCredits will be added to your wallet shortly !!")
+                .setPositiveButton("Dismiss", (dialog, which) -> {
+                    dialog.dismiss();
+                    HomeScreen.getInstance().onSupportNavigateUp();
+                }).show();
+    }
+
+    private Map<String, Object> getAddMoneyTransactionMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put(AppConstant.AMOUNT, amount);
+        map.put(AppConstant.TRANSACTION_ID, transactionId);
+        map.put(AppConstant.TIMESTAMP, System.currentTimeMillis());
+        map.put(AppConstant.UID, getUid());
+        map.put(AppConstant.ADD_MONEY_STATUS, AppConstant.PENDING);
+        return map;
 
     }
 
@@ -124,7 +168,7 @@ public class AddCreditsFragment extends Fragment {
                 }
                 optionDialog.dismiss();
 
-                createWithdrawAmountRequest();
+                createWithdrawAmountRequest(amount);
             }
         });
 
@@ -138,7 +182,7 @@ public class AddCreditsFragment extends Fragment {
 
     }
 
-    private void createWithdrawAmountRequest() {
+    private void createWithdrawAmountRequest(String amount) {
         AppUtils.showRequestDialog(requireActivity(), false);
         new WithdrawAmount(requireActivity(), new WithdrawInterface() {
             @Override
@@ -153,33 +197,45 @@ public class AddCreditsFragment extends Fragment {
                 AppUtils.hideDialog();
                 Toast.makeText(requireActivity(), (String) o, Toast.LENGTH_SHORT).show();
             }
-        }).start();
+        }).start(amount);
 
     }
 
     private void loadWalletAmount() {
         AppUtils.showRequestDialog(requireActivity());
-        Utils.getFireStoreReference().collection(USERS_QUERY).document(getUid()).get().addOnSuccessListener(documentSnapshot -> {
-            AppUtils.hideDialog();
-            if (null != documentSnapshot) {
-                {
-                    try {
-                        addCreditsBinding.tvAmount.setText("Available Balance: " + AppUtils.getCurrencyFormat(documentSnapshot.getLong(CREDITS)));
-                        if (null != documentSnapshot.get(ON_HOLD_FOR_WITHDRAW)) {
-                            addCreditsBinding.tvWithdrawAmount.setText(AppUtils.getCurrencyFormat(documentSnapshot.getLong(ON_HOLD_FOR_WITHDRAW)));
-                            addCreditsBinding.withDrawLay.setVisibility(View.VISIBLE);
-                        } else addCreditsBinding.withDrawLay.setVisibility(View.GONE);
-                        addCreditsBinding.btnWithdrawAmount.setEnabled(documentSnapshot.getLong(CREDITS) >= 200);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.d(TAG, "loadWalletAmount: " + e.getLocalizedMessage());
-                    }
-                }
-            } else
-                Toast.makeText(requireActivity(), "Unable to get wallet amount !!", Toast.LENGTH_SHORT).show();
-        }).addOnFailureListener(e -> {
+        Utils.getFireStoreReference().collection(USERS_QUERY).document(getUid()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    AppUtils.hideDialog();
+                    if (null != documentSnapshot) {
+                        {
+                            try {
+                                addCreditsBinding.tvAmount.setText("Available Balance: " + AppUtils.getCurrencyFormat(documentSnapshot.getLong(CREDITS)));
+                                if (null != documentSnapshot.get(ON_HOLD_FOR_WITHDRAW)) {
+                                    addCreditsBinding.tvWithdrawAmount.setText(AppUtils.getCurrencyFormat(documentSnapshot.getLong(ON_HOLD_FOR_WITHDRAW)));
+                                    addCreditsBinding.withDrawLay.setVisibility(View.VISIBLE);
+                                } else addCreditsBinding.withDrawLay.setVisibility(View.GONE);
+                                addCreditsBinding.btnWithdrawAmount.setEnabled(documentSnapshot.getLong(CREDITS) >= 200);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.d(TAG, "loadWalletAmount: " + e.getLocalizedMessage());
+                            }
+                        }
+                    } else
+                        Toast.makeText(requireActivity(), "Unable to get wallet amount !!", Toast.LENGTH_SHORT).show();
+                }).addOnFailureListener(e -> {
             AppUtils.hideDialog();
             Toast.makeText(requireActivity(), "User not found !!", Toast.LENGTH_SHORT).show();
+        });
+
+        Utils.getFireStoreReference().collection(AppConstant.WALLET_NUMBER).document("wallet").addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (e == null) {
+                    if (documentSnapshot.exists()) {
+                        addCreditsBinding.tvWalletNumber.setText("PayTm wallet number : " + documentSnapshot.getString("walletNumber"));
+                    }
+                }
+            }
         });
     }
 
@@ -195,7 +251,6 @@ public class AddCreditsFragment extends Fragment {
                     });
         } else Toast.makeText(requireActivity(), "No internet ", Toast.LENGTH_SHORT).show();
     }
-
 
     private void initRazorPay(String tId) {
         startPayment = new StartPayment(requireActivity());

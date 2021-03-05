@@ -58,6 +58,13 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"
             app:popUpTo="@id/dashboardFragment" />
+        <action
+            android:id="@+id/action_addCreditsFragment_to_addMoneyHistoryFragment"
+            app:destination="@id/addMoneyHistoryFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/submitNewBidFragment"
@@ -117,7 +124,8 @@
             app:destination="@id/bidDetailsFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in" />
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/poolGameListFragment"
@@ -132,4 +140,14 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
     </fragment>
+    <fragment
+        android:id="@+id/mannualAddMoneyFragment"
+        android:name="com.example.playludo.MannualAddMoneyFragment"
+        android:label="fragment_mannual_add_money"
+        tools:layout="@layout/fragment_mannual_add_money" />
+    <fragment
+        android:id="@+id/addMoneyHistoryFragment"
+        android:name="com.example.playludo.AddMoneyHistoryFragment"
+        android:label="fragment_add_money_history"
+        tools:layout="@layout/fragment_add_money_history" />
 </navigation>

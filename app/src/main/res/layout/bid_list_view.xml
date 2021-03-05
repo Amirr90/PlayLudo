@@ -25,51 +25,89 @@
         android:padding="10dp">
 
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/ivFund"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/profile_user_def"
-            app:civ_border_color="#F5487F"
-            app:civ_border_width="2dp"
-            app:layout_constraintBottom_toBottomOf="@+id/button2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/button2" />
+        <!-- <de.hdodenhof.circleimageview.CircleImageView
+             android:id="@+id/ivFund"
+             android:layout_width="35dp"
+             android:layout_height="35dp"
+             android:layout_alignParentStart="true"
+             android:layout_gravity="center_horizontal"
+             android:src="@drawable/profile_user_def"
+             app:civ_border_color="#F5487F"
+             app:civ_border_width="2dp"
+             app:layout_constraintBottom_toBottomOf="@+id/button2"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toTopOf="@+id/button2" />
+
+         <TextView
+             android:id="@+id/textView"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginStart="8dp"
+             android:fontFamily="@font/poppins_medium"
+             android:text="@{bidModel.name,default=`Amir khan`}"
+             android:textColor="@android:color/black"
+             android:textSize="16sp"
+             app:layout_constraintStart_toEndOf="@+id/ivFund"
+             app:layout_constraintTop_toTopOf="@+id/ivFund" />
+
+         <Button
+             android:id="@+id/button2"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:enabled="@{!bidModel.bidStatus}"
+             android:onClick="@{()->adapterInterface.onItemClicked(bidModel)}"
+             android:text="@{bidModel.bidStatus?`Paired`:`Accept`}"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintTop_toTopOf="parent" />
+
+         <TextView
+             android:id="@+id/tvTimestamp"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginStart="8dp"
+             android:layout_marginTop="-10dp"
+             android:includeFontPadding="false"
+             app:layout_constraintStart_toEndOf="@+id/ivFund"
+             app:layout_constraintTop_toBottomOf="@+id/textView" />
+ -->
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tvGameAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:fontFamily="@font/poppins_medium"
-            android:text="@{bidModel.name,default=`Amir khan`}"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/ivFund"
-            app:layout_constraintTop_toTopOf="@+id/ivFund" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintBottom_toBottomOf="@+id/tvBidsTimestamp"
+            app:layout_constraintStart_toStartOf="@+id/textView24"
+            app:layout_constraintTop_toBottomOf="@+id/textView24" />
+
+        <TextView
+            android:id="@+id/textView24"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@{bidModel.gameName}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btnCancel" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:enabled="@{!bidModel.bidStatus}"
+            android:layout_marginEnd="8dp"
+            android:enabled="false"
             android:onClick="@{()->adapterInterface.onItemClicked(bidModel)}"
             android:text="@{bidModel.bidStatus?`Paired`:`Accept`}"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvTimestamp"
+            android:id="@+id/tvBidsTimestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="-10dp"
-            android:includeFontPadding="false"
-            app:layout_constraintStart_toEndOf="@+id/ivFund"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintEnd_toEndOf="@+id/btnCancel"
+            app:layout_constraintTop_toBottomOf="@+id/btnCancel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

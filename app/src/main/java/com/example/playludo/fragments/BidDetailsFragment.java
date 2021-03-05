@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,8 +46,10 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -130,7 +133,7 @@ public class BidDetailsFragment extends Fragment {
 
         bidDetailsBinding.btnLoss.setOnClickListener(v ->
                 new AlertDialog.Builder(requireActivity()).setMessage("Confirm to update Loss??")
-                .setPositiveButton("Yes", (dialog, which) -> updateAsLoos()).setNegativeButton("No", (dialog, which) -> {
+                        .setPositiveButton("Yes", (dialog, which) -> updateAsLoos()).setNegativeButton("No", (dialog, which) -> {
                 }).show());
 
         bidDetailsBinding.tvRequestNewId.setOnClickListener(v -> {
@@ -147,8 +150,6 @@ public class BidDetailsFragment extends Fragment {
         InterstitialAd.load(requireActivity(), "ca-app-pub-3940256099942544/1033173712", adRequest, new InterstitialAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-
-
                 AppUtils.hideDialog();
                 mInterstitialAd = interstitialAd;
                 Log.i(TAG, "onAdLoaded");
@@ -171,7 +172,6 @@ public class BidDetailsFragment extends Fragment {
                     public void onAdShowedFullScreenContent() {
                         mInterstitialAd = null;
                         Log.d("TAG", "The ad was shown.");
-                        showAlertDialog(s);
                     }
                 });
                 if (mInterstitialAd != null) {
@@ -217,7 +217,6 @@ public class BidDetailsFragment extends Fragment {
             @Override
             public void onSuccess(Object obj) {
                 AppUtils.hideDialog();
-
                 Toast.makeText(requireActivity(), (String) obj, Toast.LENGTH_SHORT).show();
                 getBidData();
             }
@@ -316,7 +315,7 @@ public class BidDetailsFragment extends Fragment {
     }
 
     private void showAlertDialog(String amount) {
-        new AlertDialog.Builder(requireActivity()).setMessage("Do You want to accept Bid of " + amount + " ??")
+        new AlertDialog.Builder(requireActivity()).setTitle("Do You want to accept Bid of " + amount + " ??")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     dialog.dismiss();
                     if (bidModel.getGameName().equals(AppConstant.SIMPLE_JAKARTHA)) {
@@ -361,25 +360,23 @@ public class BidDetailsFragment extends Fragment {
     private void acceptBid(String uniqueId) {
         AppUtils.showRequestDialog(requireActivity(), false);
         String bidAmount = bidDetailsBinding.textView16.getText().toString();
-        //checking wallet amount
-        getFireStoreReference().collection(USERS_QUERY).document(getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (null == documentSnapshot) {
-                    Log.d(TAG, "onSuccess: null");
-                    Toast.makeText(requireActivity(), "User not found", Toast.LENGTH_SHORT).show();
-                    AppUtils.hideDialog();
-                    return;
-                }
 
-                User user = documentSnapshot.toObject(User.class);
-                if (null != user) {
-                    if (user.getCredits() >= Integer.parseInt(bidAmount)) {
-                        initBatchToAcceptBid(bidAmount, uniqueId);
-                    } else {
-                        AppUtils.hideDialog();
-                        Toast.makeText(requireActivity(), "Insufficient Balance !!", Toast.LENGTH_SHORT).show();
-                    }
+        //checking wallet amount
+        getFireStoreReference().collection(USERS_QUERY).document(getUid()).get().addOnSuccessListener(documentSnapshot -> {
+            if (null == documentSnapshot) {
+                Log.d(TAG, "onSuccess: null");
+                Toast.makeText(requireActivity(), "User not found", Toast.LENGTH_SHORT).show();
+                AppUtils.hideDialog();
+                return;
+            }
+
+            User user = documentSnapshot.toObject(User.class);
+            if (null != user) {
+                if (user.getCredits() >= Integer.parseInt(bidAmount)) {
+                    initBatchToAcceptBid(bidAmount, uniqueId);
+                } else {
+                    AppUtils.hideDialog();
+                    Toast.makeText(requireActivity(), "Insufficient Balance !!", Toast.LENGTH_SHORT).show();
                 }
             }
         }).addOnFailureListener(e -> {
@@ -443,55 +440,65 @@ public class BidDetailsFragment extends Fragment {
     }
 
     private void getBidData() {
-        getFireStoreReference().collection(BID_QUERY).document(bidId)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    AppUtils.hideDialog();
-                    Log.d(TAG, "getBidData: " + documentSnapshot);
-                    if (null == documentSnapshot) {
-                        return;
-                    }
-                    bidModel = documentSnapshot.toObject(BidModel.class);
-                    bidDetailsBinding.setBidModel(bidModel);
-
-
-                    if (null != bidModel) {
-                        bidDetailsBinding.tvBidingAmount.setText(AppUtils.getCurrencyFormat(bidModel.getBidAmount()));
-                        bidDetailsBinding.tvBidingTime.setText(AppUtils.getTimeAgo(bidModel.getTimestamp()));
-                        bidDetailsBinding.btnAccept.setEnabled(!bidModel.isBidStatus());
-
-                        if (bidModel.getGameName().equals(AppConstant.SIMPLE_JAKARTHA))
-                            bidDetailsBinding.textView12.setText("Player 1 Unique Id");
-
-                        if (null != bidModel.getBidAcceptBy())
-                            if (bidModel.getUid().equals(getUid()) || bidModel.getBidAcceptBy().equals(getUid())) {
-                                if (!bidModel.getGameStatus().equals(CLOSED))
-                                    bidDetailsBinding.resultLay.setVisibility(View.VISIBLE);
-                                else bidDetailsBinding.resultLay.setVisibility(View.GONE);
-
-
-                                if (null != bidModel.getImage())
-                                    bidDetailsBinding.textView18.setVisibility(bidModel.getImage().equals("") ? View.GONE : View.VISIBLE);
-                                else bidDetailsBinding.textView18.setVisibility(View.GONE);
-
-                                bidDetailsBinding.btnRequestContact.setVisibility(bidModel.getUid().equals(getUid()) ? View.VISIBLE : View.GONE);
-
-                                if (bidModel.getGameStatus().equals(AppConstant.CLOSED)) {
-                                    if (null != bidModel.getWinner())
-                                        if (bidModel.getWinner().equals(getUid()))
-                                            bidDetailsBinding.textView18.setText("Yow Won !!\n\n\nAmount Credits to your wallet successfully !!");
-                                        else bidDetailsBinding.textView18.setText("Yow Loss !!");
-                                }
-
-                            } else Log.d(TAG, "getBidData: Bidder ID and AccepterID not Same");
-                        else Log.d(TAG, "getBidData: null");
-
-                        bidDetailsBinding.btnAccept.setVisibility(bidModel.getUid().equals(getUid()) ? View.GONE : View.VISIBLE);
-                    }
-
-                }).addOnFailureListener(e -> {
+        getFireStoreReference().collection(BID_QUERY).document(bidId).addSnapshotListener((documentSnapshot, e) -> {
             AppUtils.hideDialog();
-            Toast.makeText(requireActivity(), "Failed to get Bid Details, try again", Toast.LENGTH_SHORT).show();
+            if (e == null && documentSnapshot != null) {
+                Log.d(TAG, "getBidData: " + documentSnapshot);
+                bidModel = documentSnapshot.toObject(BidModel.class);
+                bidDetailsBinding.setBidModel(bidModel);
+
+
+                if (null != bidModel) {
+                    bidDetailsBinding.tvBidingAmount.setText(AppUtils.getCurrencyFormat(bidModel.getBidAmount()));
+                    bidDetailsBinding.tvBidingTime.setText(AppUtils.getTimeAgo(bidModel.getTimestamp()));
+                    bidDetailsBinding.btnAccept.setEnabled(!bidModel.isBidStatus());
+
+                    if (bidModel.getGameName().equals(AppConstant.SIMPLE_JAKARTHA))
+                        bidDetailsBinding.textView12.setText("Player 1 Unique Id");
+
+
+                    if (null != bidModel.getGameStatus())
+                        bidDetailsBinding.btnRequestContact.setEnabled(!bidModel.getGameStatus().equals(CLOSED));
+
+
+                    if (null != bidModel.getBidAcceptBy())
+                        if (bidModel.getUid().equals(getUid()) || bidModel.getBidAcceptBy().equals(getUid())) {
+                            if (!bidModel.getGameStatus().equals(CLOSED))
+                                bidDetailsBinding.resultLay.setVisibility(View.VISIBLE);
+                            else bidDetailsBinding.resultLay.setVisibility(View.GONE);
+
+
+                            if (null != bidModel.getImage())
+                                bidDetailsBinding.textView18.setVisibility(bidModel.getImage().equals("") ? View.GONE : View.VISIBLE);
+                            else bidDetailsBinding.textView18.setVisibility(View.GONE);
+
+                            bidDetailsBinding.btnRequestContact.setVisibility(bidModel.getUid().equals(getUid()) ? View.VISIBLE : View.GONE);
+
+                            if (bidModel.getGameStatus().equals(CLOSED)) {
+                                if (null != bidModel.getWinner())
+                                    if (bidModel.getWinner().equals(getUid())) {
+                                        bidDetailsBinding.textView18.setTextColor(Color.GREEN);
+                                        bidDetailsBinding.textView18.setText("You Won !!\n\n\nAmount Credits to your wallet successfully !!");
+                                    } else {
+                                        bidDetailsBinding.textView18.setText("You Loss !!");
+                                        bidDetailsBinding.textView18.setTextColor(Color.RED);
+                                    }
+                            }
+
+                        } else Log.d(TAG, "getBidData: Bidder ID and AccepterID not Same");
+                    else Log.d(TAG, "getBidData: null");
+
+                    bidDetailsBinding.btnAccept.setVisibility(bidModel.getUid().equals(getUid()) ? View.GONE : View.VISIBLE);
+                }
+            } else {
+
+                Toast.makeText(requireActivity(), "Failed to get Bid Details, try again", Toast.LENGTH_SHORT).show();
+            }
         });
     }
+
+
 }
+
+
+

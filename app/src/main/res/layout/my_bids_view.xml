@@ -8,11 +8,16 @@
         <variable
             name="myBids"
             type="com.google.firebase.firestore.DocumentSnapshot" />
+
+        <variable
+            name="adapterInterface"
+            type="com.example.playludo.interfaces.AdapterInterface" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{()->adapterInterface.onItemClicked(myBids.getString(`bidId`))}"
         android:padding="10dp">
 
 

@@ -24,4 +24,12 @@ public class AppConstant {
 
 
     public static final String CLOSED = "closed";
+    public static final String ADD_MONEY_REQUEST = "addMoneyRequest";
+    public static final String AMOUNT = "amount";
+    public static final String TRANSACTION_ID = "transactionId";
+    public static final String TIMESTAMP = "timestamp";
+    public static final String UID = "uid";
+    public static final String ADD_MONEY_STATUS = "addMoneyStatus";
+    public static final String PENDING = "pending";
+    public static final String WALLET_NUMBER = "walletNumber";
 }

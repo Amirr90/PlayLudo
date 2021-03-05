@@ -50,6 +50,20 @@
                 android:textSize="20sp"
                 android:textStyle="normal" />
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="9dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins"
+                android:gravity="center"
+                android:text="send money to PayTm wallet\nYour money will be credited to your wallet after confirmation !!"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#626262"
+                android:textSize="14sp"
+                android:textStyle="normal" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -66,13 +80,13 @@
                     app:srcCompat="@drawable/ic_launcher_foreground" />
 
                 <TextView
-                    android:id="@+id/textView48"
+                    android:id="@+id/tvWalletNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="9dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins"
-                    android:text="Enter Amount"
+                    android:text="Send Money on  9044865611"
                     android:textColor="#626262"
                     android:textSize="20dp"
                     android:textStyle="normal" />
@@ -94,6 +108,34 @@
                 android:textColorHint="#80626262"
                 tools:ignore="RtlSymmetry" />
 
+            <EditText
+                android:id="@+id/etTransactionId"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rectangle_border"
+                android:gravity="center_vertical"
+                android:hint="Enter Transaction Id here"
+                android:inputType="textAutoComplete"
+                android:paddingStart="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textColor="#80626262"
+                android:textColorHint="#80626262"
+                tools:ignore="RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/tvViewAllAddMoneyRequest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="View All request"
+                android:textColor="@color/colorPrimary" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,7 +156,8 @@
                     android:textColor="#F5487F"
                     android:textSize="19sp"
                     android:textStyle="bold"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    tools:ignore="UnusedAttribute" />
 
 
                 <Button
@@ -129,7 +172,8 @@
                     android:text="@string/add"
                     android:textColor="@android:color/white"
                     android:textSize="19sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="UnusedAttribute" />
             </LinearLayout>
         </LinearLayout>
 
@@ -148,11 +192,11 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:padding="10dp"
             android:id="@+id/withDrawLay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">

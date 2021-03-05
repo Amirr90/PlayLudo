@@ -15,6 +15,9 @@ import com.example.playludo.utils.AppUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.playludo.fragments.BidFragment.BID_AMOUNT;
+import static com.example.playludo.utils.Bid.BID_STATUS;
+
 public class BidAdapter extends RecyclerView.Adapter<BidAdapter.BidVH> {
     List<BidModel> bidModels;
     AdapterInterface adapterInterface;
@@ -38,7 +41,9 @@ public class BidAdapter extends RecyclerView.Adapter<BidAdapter.BidVH> {
     public void onBindViewHolder(@NonNull BidVH holder, int position) {
         BidModel bidModel = bidModels.get(position);
         holder.binding.setBidModel(bidModel);
-        holder.binding.tvTimestamp.setText(AppUtils.getTimeAgo(bidModel.getTimestamp()));
+        holder.binding.tvBidsTimestamp.setText(AppUtils.getTimeAgo(bidModel.getTimestamp()));
+        holder.binding.tvGameAmount.setText(AppUtils.getCurrencyFormat(bidModel.getBidAmount()));
+        holder.binding.btnCancel.setEnabled(!bidModel.isBidStatus());
 
 
     }

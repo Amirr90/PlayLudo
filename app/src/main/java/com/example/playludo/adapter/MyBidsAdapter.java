@@ -3,6 +3,7 @@ package com.example.playludo.adapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -11,9 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.playludo.HomeScreen;
+import com.example.playludo.fragments.DashboardFragmentDirections;
 import com.example.playludo.fragments.MyBidsListFragment;
 import com.example.playludo.R;
 import com.example.playludo.databinding.MyBidsViewBinding;
+import com.example.playludo.interfaces.AdapterInterface;
 import com.example.playludo.models.TransactionModel;
 import com.example.playludo.utils.AppConstant;
 import com.example.playludo.utils.AppUtils;
@@ -45,10 +48,12 @@ public class MyBidsAdapter extends RecyclerView.Adapter<MyBidsAdapter.BidsVH> {
     private static final String TAG = "MyBidsAdapter";
     List<DocumentSnapshot> snapshotList;
     Activity activity;
+    AdapterInterface adapterInterface;
 
-    public MyBidsAdapter(List<DocumentSnapshot> snapshotList, Activity activity) {
+    public MyBidsAdapter(List<DocumentSnapshot> snapshotList, Activity activity, AdapterInterface adapterInterface) {
         this.snapshotList = snapshotList;
         this.activity = activity;
+        this.adapterInterface = adapterInterface;
     }
 
     @NonNull
@@ -56,6 +61,7 @@ public class MyBidsAdapter extends RecyclerView.Adapter<MyBidsAdapter.BidsVH> {
     public MyBidsAdapter.BidsVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         MyBidsViewBinding binding = MyBidsViewBinding.inflate(layoutInflater, parent, false);
+        binding.setAdapterInterface(adapterInterface);
         return new BidsVH(binding);
     }
 
@@ -78,11 +84,7 @@ public class MyBidsAdapter extends RecyclerView.Adapter<MyBidsAdapter.BidsVH> {
                 showCancelBidDialog(snapshot);
             }
         });
-        holder.binding.getRoot().setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putString(BID_ID, snapshot.getId());
-            HomeScreen.getInstance().navigate(R.id.action_myBidsListFragment_to_bidDetailsFragment, bundle);
-        });
+
     }
 
     private void showCancelBidDialog(DocumentSnapshot snapshot) {
@@ -125,7 +127,7 @@ public class MyBidsAdapter extends RecyclerView.Adapter<MyBidsAdapter.BidsVH> {
             userMap.put(INVEST, FieldValue.increment(-Long.parseLong(snapshot.getString(BID_AMOUNT))));
             sfRef.update(userMap);
             Toast.makeText(activity, "Money refunded to wallet successfully !!", Toast.LENGTH_SHORT).show();
-            MyBidsListFragment.getInstance().loadBidsListData();
+            MyBidsListFragment.getInstance().loadBidsListData(0);
         }).addOnFailureListener(e -> Toast.makeText(activity, "try again !!", Toast.LENGTH_SHORT).show());
     }
 
