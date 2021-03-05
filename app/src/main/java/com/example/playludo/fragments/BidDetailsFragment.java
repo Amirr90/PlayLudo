@@ -253,7 +253,8 @@ public class BidDetailsFragment extends Fragment {
 
         ImagePicker.Companion.with(this)
                 .compress(512)//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
+                .crop(4f, 6f)
+                .maxResultSize(800, 800)    //Final image resolution will be less than 1080 x 1080(Optional)
                 .start();
 
     }
