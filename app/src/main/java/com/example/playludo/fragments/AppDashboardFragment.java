@@ -56,7 +56,6 @@ import static com.example.playludo.utils.Utils.getUid;
 public class AppDashboardFragment extends Fragment {
     private static final String TAG = "AppDashboardFragment";
 
-    public static final String GAME_NAME = "gameName";
     public static final String ADD_NEW_BID_TOPIC = "AddNewBidTopic";
     FragmentAppDashboardBinding binding;
     NavController navController;
@@ -88,32 +87,31 @@ public class AppDashboardFragment extends Fragment {
         binding.adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
+
                 Log.d(TAG, "onAdLoaded: ");
             }
 
             @Override
             public void onAdFailedToLoad(LoadAdError adError) {
-                // Code to be executed when an ad request fails.
-                Log.d(TAG, "onAdFailedToLoad: ");
+
+                Log.d(TAG, "onAdFailedToLoad: " + adError.getMessage());
             }
 
             @Override
             public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
+
                 Log.d(TAG, "onAdOpened: ");
             }
 
             @Override
             public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
+
                 Log.d(TAG, "onAdClicked: ");
             }
 
             @Override
             public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
+
                 Log.d(TAG, "onAdLeftApplication: ");
             }
 

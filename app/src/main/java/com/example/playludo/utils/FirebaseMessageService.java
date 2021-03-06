@@ -43,6 +43,7 @@ public class FirebaseMessageService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "onMessageReceived: " + remoteMessage.getData());
+        Log.d(TAG, "onMessageReceived: " + remoteMessage.getNotification());
 
         try {
             showNotification(remoteMessage.getData());
@@ -55,9 +56,12 @@ public class FirebaseMessageService extends FirebaseMessagingService {
     private void showNotification(Map<String, String> data) throws JSONException {
 
         JSONObject json = new JSONObject(data);
-        String gameId = json.getString("gameId");
+        String gameId = null;
+        if (null != json.getString("bidId"))
+            gameId = json.getString("bidId");
+
         String title = json.getString("title");
-        String msg = json.getString("msg");
+        String msg = json.getString("body");
 
         Bundle bundle = new Bundle();
         bundle.putString("gameId", gameId);
@@ -68,7 +72,6 @@ public class FirebaseMessageService extends FirebaseMessagingService {
                 .createPendingIntent();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Log.d(TAG, "createNotification: ");
             NotificationChannel androidChannel = new NotificationChannel(CHANNEL_ID,
                     title, NotificationManager.IMPORTANCE_HIGH);
             androidChannel.enableLights(true);
@@ -83,7 +86,7 @@ public class FirebaseMessageService extends FirebaseMessagingService {
                     .setContentTitle(title)
                     .setContentText(msg)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
-                    .setAutoCancel(true) //remove notification after click
+                    .setAutoCancel(true)
                     .setContentIntent(pendingIntent);
 
             if (bitmap != null) {
