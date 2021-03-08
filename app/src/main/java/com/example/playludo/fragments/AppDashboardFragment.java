@@ -3,6 +3,7 @@ package com.example.playludo.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +42,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.startapp.sdk.ads.banner.Banner;
+import com.startapp.sdk.ads.banner.BannerListener;
+import com.startapp.sdk.adsbase.StartAppSDK;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -65,8 +69,16 @@ public class AppDashboardFragment extends Fragment {
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAppDashboardBinding.inflate(getLayoutInflater());
+        initStartAdNetwork();
         initAds();
         return binding.getRoot();
+    }
+
+    private void initStartAdNetwork() {
+        StartAppSDK.setUserConsent(requireActivity(),
+                "pas",
+                System.currentTimeMillis(),
+                true);
     }
 
     @Override
@@ -77,13 +89,44 @@ public class AppDashboardFragment extends Fragment {
         checkForUsername();
         subscribeToNewBidsTopic();
         setBannerAdd();
+        setStartNetworkBannerAd();
 
 
+    }
+
+    private void setStartNetworkBannerAd() {
+        binding.startAppBanner.loadAd(400, 100);
+        new Banner(requireActivity(), new BannerListener() {
+            @Override
+            public void onReceiveAd(View banner) {
+                Log.d(TAG, "onReceiveAd: " + banner);
+            }
+
+            @Override
+            public void onFailedToReceiveAd(View banner) {
+                Log.d(TAG, "onFailedToReceiveAd: " + banner);
+            }
+
+            @Override
+            public void onImpression(View view) {
+                Log.d(TAG, "onImpression: " + view);
+            }
+
+            @Override
+            public void onClick(View banner) {
+                Log.d(TAG, "onClick: " + banner);
+            }
+        });
     }
 
     private void setBannerAdd() {
         AdRequest adRequest = new AdRequest.Builder().build();
         binding.adView.loadAd(adRequest);
+        binding.adView2.loadAd(adRequest);
+        binding.adView3.loadAd(adRequest);
+        binding.adView4.loadAd(adRequest);
+        binding.adView5.loadAd(adRequest);
+        binding.adView6.loadAd(adRequest);
         binding.adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
@@ -155,6 +198,7 @@ public class AppDashboardFragment extends Fragment {
         final View formElementsView = inflater.inflate(R.layout.submit_name_dialog_view, null, false);
 
         final SubmitNameDialogViewBinding genderViewBinding = SubmitNameDialogViewBinding.bind(formElementsView);
+        genderViewBinding.etAmount.setInputType(InputType.TYPE_CLASS_TEXT);
         genderViewBinding.btnOk.setOnClickListener(v -> {
             String name = genderViewBinding.etAmount.getText().toString().trim();
             if (TextUtils.isEmpty(name)) {

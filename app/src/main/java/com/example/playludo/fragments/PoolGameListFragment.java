@@ -59,42 +59,39 @@ public class PoolGameListFragment extends Fragment {
     private void setBannerAdd() {
         AdRequest adRequest = new AdRequest.Builder().build();
         binding.adView.loadAd(adRequest);
+        binding.adView2.loadAd(adRequest);
+        binding.adView3.loadAd(adRequest);
+        binding.adView6.loadAd(adRequest);
+        binding.adView5.loadAd(adRequest);
+        binding.adView4.loadAd(adRequest);
         binding.adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
                 Log.d(TAG, "onAdLoaded: ");
             }
 
             @Override
             public void onAdFailedToLoad(LoadAdError adError) {
-                // Code to be executed when an ad request fails.
                 Log.d(TAG, "onAdFailedToLoad: ");
             }
 
             @Override
             public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
                 Log.d(TAG, "onAdOpened: ");
             }
 
             @Override
             public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
                 Log.d(TAG, "onAdClicked: ");
             }
 
             @Override
             public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
                 Log.d(TAG, "onAdLeftApplication: ");
             }
 
             @Override
             public void onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
                 Log.d(TAG, "onAdClosed: ");
             }
         });

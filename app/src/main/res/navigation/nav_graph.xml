@@ -148,6 +148,6 @@
     <fragment
         android:id="@+id/addMoneyHistoryFragment"
         android:name="com.example.playludo.AddMoneyHistoryFragment"
-        android:label="fragment_add_money_history"
+        android:label="Add Money History"
         tools:layout="@layout/fragment_add_money_history" />
 </navigation>

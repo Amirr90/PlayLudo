@@ -147,7 +147,8 @@ public class BidDetailsFragment extends Fragment {
     }
 
     private void showInterstitialAd(String s) {
-        InterstitialAd.load(requireActivity(), "ca-app-pub-3940256099942544/1033173712", adRequest, new InterstitialAdLoadCallback() {
+
+        InterstitialAd.load(requireActivity(), "ca-app-pub-5778282166425967/9899420991", adRequest, new InterstitialAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
                 AppUtils.hideDialog();
@@ -183,7 +184,6 @@ public class BidDetailsFragment extends Fragment {
 
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                // Handle the error
                 Log.i(TAG, loadAdError.getMessage());
                 mInterstitialAd = null;
                 AppUtils.hideDialog();
@@ -253,7 +253,7 @@ public class BidDetailsFragment extends Fragment {
 
         ImagePicker.Companion.with(this)
                 .compress(512)//Final image size will be less than 1 MB(Optional)
-                .crop(4f, 6f)
+                //.crop(4f, 6f)
                 .maxResultSize(800, 800)    //Final image resolution will be less than 1080 x 1080(Optional)
                 .start();
 

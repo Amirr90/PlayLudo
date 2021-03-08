@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -62,6 +64,7 @@ public class AddMoneyHistoryFragment extends Fragment {
         snapshots = new ArrayList<>();
         adapter = new AddMoneyHistoryAdapter(snapshots);
         historyBinding.recViewHistory.setAdapter(adapter);
+        historyBinding.recViewHistory.addItemDecoration(new DividerItemDecoration(requireActivity(), LinearLayoutManager.VERTICAL));
         loadData();
     }
 
@@ -70,8 +73,10 @@ public class AddMoneyHistoryFragment extends Fragment {
                 .whereEqualTo(UID, getUid())
                 .orderBy(AppConstant.TIMESTAMP, Query.Direction.DESCENDING)
                 .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    snapshots.clear();
                     if (e == null) {
-                        snapshots.addAll(queryDocumentSnapshots.getDocuments());
+                        if (null != queryDocumentSnapshots)
+                            snapshots.addAll(queryDocumentSnapshots.getDocuments());
                         adapter.notifyDataSetChanged();
                     } else Log.d(TAG, "onEvent: " + e.getLocalizedMessage());
                 });
@@ -96,6 +101,7 @@ public class AddMoneyHistoryFragment extends Fragment {
         public void onBindViewHolder(@NonNull AddMoneyVH holder, int position) {
             DocumentSnapshot snapshot = snapshots.get(position);
             holder.binding.setAddMoney(snapshot);
+            Log.d(TAG, "onBindViewHolder: " + snapshot.getString(AppConstant.ADD_MONEY_STATUS));
             holder.binding.textView.setText(AppUtils.getTimeAgo(snapshot.getLong(TIMESTAMP)));
             holder.binding.textView27.setText(AppUtils.getCurrencyFormat(snapshot.getString(AppConstant.AMOUNT)));
         }

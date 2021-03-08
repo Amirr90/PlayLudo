@@ -193,7 +193,7 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+                app:layout_constraintTop_toBottomOf="@+id/startAppBannerInBidDetailPage"
                 tools:listitem="@layout/bid_list_view" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -256,6 +256,15 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.startapp.sdk.ads.banner.Banner
+                android:id="@+id/startAppBannerInBidDetailPage"
+                android:layout_width="400dp"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+                app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
+                app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

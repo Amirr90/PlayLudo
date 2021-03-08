@@ -116,7 +116,7 @@
                 android:background="@drawable/rectangle_border"
                 android:gravity="center_vertical"
                 android:hint="Enter Transaction Id here"
-                android:inputType="textAutoComplete"
+                android:inputType="phone"
                 android:paddingStart="20dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"

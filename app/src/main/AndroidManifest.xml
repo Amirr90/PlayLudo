@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.playludo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission
+        android:name="android.permission.ACCESS_WIFI_STATE"
+        tools:node="remove" />
+
 
     <application
         android:allowBackup="true"
@@ -31,7 +37,11 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-5778282166425967~2552495580"/>
+            android:value="ca-app-pub-5778282166425967~2552495580" />
+
+        <meta-data
+            android:name="com.startapp.sdk.APPLICATION_ID"
+            android:value="202569843" />
 
         <service
             android:name=".utils.FirebaseMessageService"

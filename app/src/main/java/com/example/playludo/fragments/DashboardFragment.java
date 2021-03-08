@@ -38,6 +38,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.startapp.sdk.ads.banner.Banner;
+import com.startapp.sdk.ads.banner.BannerListener;
+import com.startapp.sdk.ads.nativead.NativeAdPreferences;
+import com.startapp.sdk.ads.nativead.StartAppNativeAd;
+import com.startapp.sdk.adsbase.StartAppSDK;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -77,6 +82,7 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
     String gameType = null;
 
     String userName;
+//    private StartAppNativeAd startAppNativeAd = new StartAppNativeAd(requireActivity());
 
     public String getUserName() {
         return userName == null ? FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() : userName;
@@ -92,7 +98,16 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
 
         dashboardBinding = FragmentDashboardBinding.inflate(getLayoutInflater());
         instance = this;
+
         return dashboardBinding.getRoot();
+    }
+
+    private void initStartAdNetwork() {
+        StartAppSDK.setUserConsent(requireActivity(),
+                "pas",
+                System.currentTimeMillis(),
+                true);
+       // startAppNativeAd.loadAd(new NativeAdPreferences());
     }
 
     private void setDashboardRecData() {
@@ -125,6 +140,32 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
         dashboardBinding.btnAddBid.setOnClickListener(v -> {
             openSubmitBidDialog();
         });
+
+    }
+
+    private void showStartAdBanner() {
+        dashboardBinding.startAppBannerInBidDetailPage.loadAd(400, 70);
+        new Banner(requireActivity(), new BannerListener() {
+            @Override
+            public void onReceiveAd(View banner) {
+                Log.d(TAG, "onReceiveAd: " + banner);
+            }
+
+            @Override
+            public void onFailedToReceiveAd(View banner) {
+                Log.d(TAG, "onFailedToReceiveAd: " + banner);
+            }
+
+            @Override
+            public void onImpression(View view) {
+                Log.d(TAG, "onImpression: " + view);
+            }
+
+            @Override
+            public void onClick(View banner) {
+                Log.d(TAG, "onClick: " + banner);
+            }
+        });
     }
 
     private void openSubmitBidDialog() {
@@ -145,8 +186,8 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
                 genderViewBinding.etGameId.setError("game Id required !!");
             } else if (TextUtils.isDigitsOnly(amount) && !TextUtils.isEmpty(amount)) {
 
-                if (Long.parseLong(amount) < 50) {
-                    genderViewBinding.etAmount.setError("minimum bid amount is 50");
+                if (Long.parseLong(amount) < 10) {
+                    genderViewBinding.etAmount.setError("minimum bid amount is 10");
                     return;
                 }
                 optionDialog.dismiss();
@@ -191,7 +232,6 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
     }
 
     private void addBidData() {
-
         Utils.getFireStoreReference().collection(BID_QUERY).add(getBidModel()).addOnSuccessListener(documentReference -> Toast.makeText(requireActivity(), "Added !!", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.getLocalizedMessage()));
     }
 
@@ -224,6 +264,8 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
     }
 
     public void setBidRecData(int position) {
+        initStartAdNetwork();
+        showStartAdBanner();
         AppUtils.showRequestDialog(requireActivity());
         if (position == 0) {
             getFireStoreReference().collection(BID_QUERY)

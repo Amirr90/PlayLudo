@@ -34,10 +34,8 @@ public class FirebaseMessageService extends FirebaseMessagingService {
 
     private static final String TAG = "FirebaseMessageService";
     String CHANNEL_ID = "com.example.playludo";
-
     private NotificationManager mManager;
     Bitmap bitmap;
-
     Context context;
 
     @Override
