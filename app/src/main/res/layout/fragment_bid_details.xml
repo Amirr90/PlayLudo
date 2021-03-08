@@ -129,7 +129,6 @@
 
                 <TextView
                     android:id="@+id/textView9"
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
@@ -142,7 +141,6 @@
 
                 <TextView
                     android:id="@+id/textView10"
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -169,7 +167,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/poppins"
-                    android:text="@string/game_id"
+                    android:text="@{bidModel.gameName.equals(AppConstant.LUDO_KING)?`Room Code`:`Pool Gamew Id`}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -191,8 +189,10 @@
                     android:id="@+id/tvRequestNewId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:tag="0"
                     android:text="request new Id"
                     android:textColor="@color/YellowColo"
+                    android:visibility="@{bidModel.bidStatus?View.GONE:View.VISIBLE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
@@ -224,13 +224,13 @@
                     android:id="@+id/textView20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/poppins"
                     android:text="@string/player_two"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:visibility="@{bidModel.gameName.equals(AppConstant.SIMPLE_JAKARTHA)?View.VISIBLE:View.GONE}"
                     app:layout_constraintStart_toStartOf="@+id/textView12"
-                    app:layout_constraintTop_toBottomOf="@+id/textView12" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvRequestNewId" />
 
                 <TextView
                     android:layout_width="wrap_content"

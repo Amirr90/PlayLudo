@@ -27,10 +27,12 @@ import android.widget.Toast;
 import com.example.playludo.R;
 import com.example.playludo.databinding.FragmentBidDetailsBinding;
 import com.example.playludo.databinding.SubmitBidDialogViewBinding;
+import com.example.playludo.interfaces.Api;
 import com.example.playludo.interfaces.ApiCallbackInterface;
 import com.example.playludo.models.BidModel;
 import com.example.playludo.models.TransactionModel;
 import com.example.playludo.models.User;
+import com.example.playludo.utils.ApiUtils;
 import com.example.playludo.utils.AppConstant;
 import com.example.playludo.utils.AppUtils;
 import com.example.playludo.utils.Bid;
@@ -137,12 +139,62 @@ public class BidDetailsFragment extends Fragment {
                 }).show());
 
         bidDetailsBinding.tvRequestNewId.setOnClickListener(v -> {
-            AppUtils.showRequestDialog(requireActivity());
-            sendRequestId();
+            if (bidDetailsBinding.tvRequestNewId.getTag().equals("0")) {
+                sendRequestId();
+            } else {
+                showDialogToEnterRoomCode();
+            }
         });
         bidDetailsBinding.btnRequestContact.setOnClickListener(v -> {
             AppUtils.showRequestDialog(requireActivity());
             sendShareContact();
+        });
+    }
+
+    private void showDialogToEnterRoomCode() {
+        LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View formElementsView = inflater.inflate(R.layout.submit_bid_dialog_view, null, false);
+
+        final SubmitBidDialogViewBinding genderViewBinding = SubmitBidDialogViewBinding.bind(formElementsView);
+
+        genderViewBinding.textView46.setHint(bidModel.getGameName());
+        genderViewBinding.textView48.setText("Enter Unique Room Code");
+        genderViewBinding.etAmount.setHint("Room Code here");
+        genderViewBinding.etAmount.setVisibility(View.VISIBLE);
+
+        genderViewBinding.btnOk.setOnClickListener(v -> {
+            optionDialog.dismiss();
+            String uniqueId = genderViewBinding.etAmount.getText().toString().trim();
+            if (TextUtils.isEmpty(uniqueId)) {
+                genderViewBinding.etAmount.setError("unique Id required !!");
+
+            } else {
+                updateNewRoomCode(uniqueId);
+            }
+        });
+
+        genderViewBinding.btnCancel.setOnClickListener(v -> optionDialog.dismiss());
+
+        // the alert dialog
+        optionDialog = new AlertDialog.Builder(requireActivity()).create();
+        optionDialog.setView(formElementsView);
+        optionDialog.show();
+    }
+
+    private void updateNewRoomCode(String uniqueId) {
+        AppUtils.showRequestDialog(requireActivity());
+        ApiUtils.updateRoomCode(bidModel.getBidId(), uniqueId, new ApiCallbackInterface() {
+            @Override
+            public void onSuccess(Object obj) {
+                AppUtils.hideDialog();
+                Toast.makeText(requireActivity(), "" + obj, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailed(String msg) {
+                AppUtils.hideDialog();
+                Toast.makeText(requireActivity(), "" + msg, Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -231,7 +283,7 @@ public class BidDetailsFragment extends Fragment {
     }
 
     private void sendRequestId() {
-        if (null != bidModel) {
+       /* if (null != bidModel) {
             Utils.getFireStoreReference().collection(USERS_QUERY).document(bidModel.getUid())
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
@@ -241,11 +293,21 @@ public class BidDetailsFragment extends Fragment {
                             sendNotification(bidderToken);
                         }
                     });
-        }
-    }
+        }*/
+        AppUtils.showRequestDialog(requireActivity());
+        ApiUtils.requestNewRoomCode(bidModel.getBidId(), new ApiCallbackInterface() {
+            @Override
+            public void onSuccess(Object obj) {
+                AppUtils.hideDialog();
+                Toast.makeText(requireActivity(), "" + obj, Toast.LENGTH_SHORT).show();
+            }
 
-    private void sendNotification(String bidderToken) {
-
+            @Override
+            public void onFailed(String msg) {
+                AppUtils.hideDialog();
+                Toast.makeText(requireActivity(), "" + msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void selectImage() {
@@ -449,9 +511,16 @@ public class BidDetailsFragment extends Fragment {
 
 
                 if (null != bidModel) {
+
                     bidDetailsBinding.tvBidingAmount.setText(AppUtils.getCurrencyFormat(bidModel.getBidAmount()));
                     bidDetailsBinding.tvBidingTime.setText(AppUtils.getTimeAgo(bidModel.getTimestamp()));
                     bidDetailsBinding.btnAccept.setEnabled(!bidModel.isBidStatus());
+
+
+                    if (bidModel.getUid().equals(getUid())) {
+                        bidDetailsBinding.tvRequestNewId.setText("Update Room Code");
+                        bidDetailsBinding.tvRequestNewId.setTag("1");
+                    }
 
 
                     if (bidModel.getGameName().equals(AppConstant.SIMPLE_JAKARTHA))

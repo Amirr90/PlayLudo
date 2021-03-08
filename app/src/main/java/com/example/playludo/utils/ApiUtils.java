@@ -22,16 +22,16 @@ public class ApiUtils {
             dashBoardResCall.enqueue(new Callback<BidRes>() {
                 @Override
                 public void onResponse(@NotNull Call<BidRes> call, @NotNull Response<BidRes> response) {
-                    /*if (response.code() == 200 && null != response.body()) {
+                    if (response.code() == 200 && null != response.body()) {
                         if (response.body().getResponseCode() == 1) {
-                            apiCallbackInterface.onSuccess(response.body().getResponseValue());
+                            apiCallbackInterface.onSuccess(response.body().getResponseMessage());
                         } else {
                             apiCallbackInterface.onFailed(response.body().getResponseMessage());
                         }
-                    } else apiCallbackInterface.onFailed(response.message());*/
-                    if (response.code() == 200) {
+                    } else apiCallbackInterface.onFailed(response.message());
+                    /*if (response.code() == 200) {
                         apiCallbackInterface.onSuccess("result updated successfully !!");
-                    } else apiCallbackInterface.onFailed("failed to update result !!");
+                    } else apiCallbackInterface.onFailed("failed to update result !!");*/
                 }
 
                 @Override
@@ -49,6 +49,60 @@ public class ApiUtils {
         try {
             final Api api = URLUtils.getAPIService();
             Call<BidRes> dashBoardResCall = api.cancelBid(bidId, getUid());
+            dashBoardResCall.enqueue(new Callback<BidRes>() {
+                @Override
+                public void onResponse(@NotNull Call<BidRes> call, @NotNull Response<BidRes> response) {
+                    if (response.code() == 200 && null != response.body()) {
+                        if (response.body().getResponseCode() == 1) {
+                            apiCallbackInterface.onSuccess(response.body().getResponseMessage());
+                        } else {
+                            apiCallbackInterface.onFailed(response.body().getResponseMessage());
+                        }
+                    } else apiCallbackInterface.onFailed(response.message());
+                }
+
+                @Override
+                public void onFailure(@NotNull Call<BidRes> call, @NotNull Throwable t) {
+                    apiCallbackInterface.onFailed(t.getLocalizedMessage());
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void requestNewRoomCode(String bidId, ApiCallbackInterface apiCallbackInterface) {
+        try {
+            final Api api = URLUtils.getAPIService();
+            Call<BidRes> dashBoardResCall = api.requestNewRoomCode(bidId, getUid());
+            dashBoardResCall.enqueue(new Callback<BidRes>() {
+                @Override
+                public void onResponse(@NotNull Call<BidRes> call, @NotNull Response<BidRes> response) {
+                    if (response.code() == 200 && null != response.body()) {
+                        if (response.body().getResponseCode() == 1) {
+                            apiCallbackInterface.onSuccess(response.body().getResponseMessage());
+                        } else {
+                            apiCallbackInterface.onFailed(response.body().getResponseMessage());
+                        }
+                    } else apiCallbackInterface.onFailed(response.message());
+                }
+
+                @Override
+                public void onFailure(@NotNull Call<BidRes> call, @NotNull Throwable t) {
+                    apiCallbackInterface.onFailed(t.getLocalizedMessage());
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateRoomCode(String bidId, String uniqueId, ApiCallbackInterface apiCallbackInterface) {
+        try {
+            final Api api = URLUtils.getAPIService();
+            Call<BidRes> dashBoardResCall = api.updateCode(bidId, uniqueId, getUid());
             dashBoardResCall.enqueue(new Callback<BidRes>() {
                 @Override
                 public void onResponse(@NotNull Call<BidRes> call, @NotNull Response<BidRes> response) {

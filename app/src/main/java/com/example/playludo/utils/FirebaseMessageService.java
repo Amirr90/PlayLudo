@@ -54,10 +54,11 @@ public class FirebaseMessageService extends FirebaseMessagingService {
     private void showNotification(Map<String, String> data) throws JSONException {
 
         JSONObject json = new JSONObject(data);
-        String gameId = null;
-        if (null != json.getString("bidId"))
-            gameId = json.getString("bidId");
 
+        if (json.getString("type").equals(AppConstant.BID)) {
+
+        }
+        String gameId = json.getString("bidId");
         String title = json.getString("title");
         String msg = json.getString("body");
 

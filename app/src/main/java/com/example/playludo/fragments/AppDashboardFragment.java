@@ -122,11 +122,11 @@ public class AppDashboardFragment extends Fragment {
     private void setBannerAdd() {
         AdRequest adRequest = new AdRequest.Builder().build();
         binding.adView.loadAd(adRequest);
-        binding.adView2.loadAd(adRequest);
+        /*binding.adView2.loadAd(adRequest);
         binding.adView3.loadAd(adRequest);
         binding.adView4.loadAd(adRequest);
         binding.adView5.loadAd(adRequest);
-        binding.adView6.loadAd(adRequest);
+        binding.adView6.loadAd(adRequest);*/
         binding.adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
