@@ -59,9 +59,6 @@ public class ApiUtils {
                             apiCallbackInterface.onFailed(response.body().getResponseMessage());
                         }
                     } else apiCallbackInterface.onFailed(response.message());
-                   /* if (response.code() == 200) {
-                        apiCallbackInterface.onSuccess("bid cancelled successfully !!");
-                    } else apiCallbackInterface.onFailed("failed to cancel bid !!");*/
                 }
 
                 @Override

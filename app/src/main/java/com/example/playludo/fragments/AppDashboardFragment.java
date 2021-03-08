@@ -130,7 +130,6 @@ public class AppDashboardFragment extends Fragment {
         binding.adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-
                 Log.d(TAG, "onAdLoaded: ");
             }
 

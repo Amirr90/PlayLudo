@@ -86,17 +86,16 @@ public class AddCreditsFragment extends Fragment {
 
         navController = Navigation.findNavController(view);
 
-
         loadWalletAmount();
         addCreditsBinding.btnOk.setOnClickListener(v -> {
             amount = addCreditsBinding.etAmount.getText().toString();
             transactionId = addCreditsBinding.etTransactionId.getText().toString();
             if (TextUtils.isEmpty(amount)) {
                 Toast.makeText(requireActivity(), "Enter Amount !!", Toast.LENGTH_SHORT).show();
-                // tId = String.valueOf(System.currentTimeMillis());
-                // initTransaction(tId);
+            } else if (Long.parseLong(amount) > 10000) {
+                Toast.makeText(requireActivity(), "Add amount should be less than or equal to ₹10000 !!", Toast.LENGTH_SHORT).show();
             } else if (Long.parseLong(amount) < 10) {
-                Toast.makeText(requireActivity(), "Add amount should be greater than ₹10 !!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), "Add amount should be greater than or equal to ₹10 !!", Toast.LENGTH_SHORT).show();
             } else if (TextUtils.isEmpty(transactionId)) {
                 Toast.makeText(requireActivity(), "Enter Transaction Id !!", Toast.LENGTH_SHORT).show();
             } else {

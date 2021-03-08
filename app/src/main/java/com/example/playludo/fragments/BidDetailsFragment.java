@@ -154,43 +154,42 @@ public class BidDetailsFragment extends Fragment {
                 AppUtils.hideDialog();
                 mInterstitialAd = interstitialAd;
                 Log.i(TAG, "onAdLoaded");
+
                 mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
                     @Override
                     public void onAdDismissedFullScreenContent() {
-                        Log.d("TAG", "The ad was dismissed.");
+                        Log.d(TAG, "The ad was dismissed.");
                         showAlertDialog(s);
-
                     }
 
                     @Override
                     public void onAdFailedToShowFullScreenContent(AdError adError) {
-                        Log.d("TAG", "The ad failed to show.");
+                        Log.d(TAG, "The ad failed to show.");
                         showAlertDialog(s);
-
                     }
 
                     @Override
                     public void onAdShowedFullScreenContent() {
                         mInterstitialAd = null;
-                        Log.d("TAG", "The ad was shown.");
+                        Log.d(TAG, "The ad was shown.");
                     }
                 });
                 if (mInterstitialAd != null) {
                     mInterstitialAd.show(requireActivity());
                 } else {
-                    Log.d("TAG", "The interstitial ad wasn't ready yet.");
+                    Log.d(TAG, "The interstitial ad wasn't ready yet.");
                 }
             }
 
             @Override
             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                Log.i(TAG, loadAdError.getMessage());
                 mInterstitialAd = null;
                 AppUtils.hideDialog();
+                showAlertDialog(s);
+                Log.d(TAG, "onAdFailedToLoad: " + loadAdError.getMessage());
             }
 
         });
-
 
     }
 
@@ -454,13 +453,12 @@ public class BidDetailsFragment extends Fragment {
                     bidDetailsBinding.tvBidingTime.setText(AppUtils.getTimeAgo(bidModel.getTimestamp()));
                     bidDetailsBinding.btnAccept.setEnabled(!bidModel.isBidStatus());
 
+
                     if (bidModel.getGameName().equals(AppConstant.SIMPLE_JAKARTHA))
                         bidDetailsBinding.textView12.setText("Player 1 Unique Id");
 
-
                     if (null != bidModel.getGameStatus())
                         bidDetailsBinding.btnRequestContact.setEnabled(!bidModel.getGameStatus().equals(CLOSED));
-
 
                     if (null != bidModel.getBidAcceptBy())
                         if (bidModel.getUid().equals(getUid()) || bidModel.getBidAcceptBy().equals(getUid())) {
@@ -488,6 +486,7 @@ public class BidDetailsFragment extends Fragment {
 
                         } else Log.d(TAG, "getBidData: Bidder ID and AccepterID not Same");
                     else Log.d(TAG, "getBidData: null");
+
 
                     bidDetailsBinding.btnAccept.setVisibility(bidModel.getUid().equals(getUid()) ? View.GONE : View.VISIBLE);
                 }
