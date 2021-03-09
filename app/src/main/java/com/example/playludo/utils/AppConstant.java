@@ -32,6 +32,7 @@ public class AppConstant {
     public static final String ADD_MONEY_STATUS = "addMoneyStatus";
     public static final String PENDING = "pending";
     public static final String WALLET_NUMBER = "walletNumber";
+    public static final String NUMBER = "number";
     public static final String BID = "bid";
     public static final String ADD_MONEY = "addMoney";
 }

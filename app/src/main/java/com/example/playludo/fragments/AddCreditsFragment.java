@@ -32,6 +32,7 @@ import com.example.playludo.utils.Utils;
 import com.example.playludo.utils.WithdrawAmount;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
@@ -135,6 +136,7 @@ public class AddCreditsFragment extends Fragment {
         map.put(AppConstant.TRANSACTION_ID, transactionId);
         map.put(AppConstant.TIMESTAMP, System.currentTimeMillis());
         map.put(AppConstant.UID, getUid());
+        map.put(AppConstant.NUMBER, FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
         map.put(AppConstant.ADD_MONEY_STATUS, AppConstant.PENDING);
         return map;
 
