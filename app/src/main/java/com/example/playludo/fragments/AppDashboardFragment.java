@@ -74,7 +74,6 @@ public class AppDashboardFragment extends Fragment {
     NavController navController;
     AlertDialog optionDialog;
     String userName;
-//    private StartAppNativeAd startAppNativeAd = new StartAppNativeAd(requireActivity());
 
     public String getUserName() {
         return userName == null ? FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() : userName;
@@ -199,8 +198,6 @@ public class AppDashboardFragment extends Fragment {
 
             @Override
             public void onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
                 Log.d(TAG, "onAdClosed: ");
             }
         });
