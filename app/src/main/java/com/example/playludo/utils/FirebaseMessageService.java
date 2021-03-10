@@ -40,13 +40,16 @@ public class FirebaseMessageService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d(TAG, "onMessageReceived: " + remoteMessage.getData());
-        Log.d(TAG, "onMessageReceived: " + remoteMessage.getNotification());
+        Log.d(TAG, "onMessageReceivedData: " + remoteMessage.getData());
+        Log.d(TAG, "onMessageReceivedNotification: " + remoteMessage.getNotification().getBody());
 
         try {
-            showNotification(remoteMessage.getData());
+            if (remoteMessage.getData() != null)
+                showNotification(remoteMessage.getData());
+            else Log.d(TAG, "onMessageReceivedData: " + remoteMessage.getData());
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.d(TAG, "onMessageReceived: error " + e.getLocalizedMessage());
         }
 
     }
@@ -55,12 +58,9 @@ public class FirebaseMessageService extends FirebaseMessagingService {
 
         JSONObject json = new JSONObject(data);
 
-        if (json.getString("type").equals(AppConstant.BID)) {
-
-        }
-        String gameId = json.getString("bidId");
         String title = json.getString("title");
         String msg = json.getString("body");
+        String gameId = json.getString("bidId");
 
         Bundle bundle = new Bundle();
         bundle.putString("gameId", gameId);

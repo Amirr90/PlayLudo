@@ -23,6 +23,7 @@
     <string name="enter_your_name">Enter Your name</string>
     <string name="contact_details">Contact Details</string>
     <string name="accepted_by">Accepted By</string>
+    <string name="default_notification_channel_id">com.example.playludo</string>
 
     <string-array name="game_name_array">
         <item>Cappuccino</item>

@@ -35,4 +35,6 @@ public class AppConstant {
     public static final String NUMBER = "number";
     public static final String BID = "bid";
     public static final String ADD_MONEY = "addMoney";
+    public static final String BID_ID = "BidId";
+    public static final String NOTIFICATION_TYPE = "notificationType";
 }

@@ -20,6 +20,10 @@ import android.widget.TextView;
 
 import com.example.playludo.PaymentUtils.StartPayment;
 import com.example.playludo.databinding.ActivityHomeScreenBinding;
+import com.example.playludo.fragments.AppDashboardFragment;
+import com.example.playludo.fragments.AppDashboardFragmentDirections;
+import com.example.playludo.fragments.DashboardFragmentDirections;
+import com.example.playludo.utils.AppConstant;
 import com.example.playludo.utils.AppUtils;
 import com.example.playludo.utils.Utils;
 import com.firebase.ui.auth.AuthUI;
@@ -46,9 +50,6 @@ public class HomeScreen extends AppCompatActivity implements PaymentResultWithDa
         return instance;
     }
 
-    int cartCounter = 100;
-    TextView cartTv;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +63,36 @@ public class HomeScreen extends AppCompatActivity implements PaymentResultWithDa
         navController = Navigation.findNavController(this, R.id.nav_host);
         NavigationUI.setupActionBarWithNavController(this, navController);
         generateFcmToken();
+        getData();
+    }
+
+    public void getData() {
+        String bidId = getIntent().getStringExtra(AppConstant.BID_ID);
+        String type = getIntent().getStringExtra(AppConstant.NOTIFICATION_TYPE);
+
+        Log.d(TAG, "bidId: " + bidId);
+        Log.d(TAG, "type: " + type);
+
+        if (null != bidId && !bidId.isEmpty()) {
+            AppDashboardFragmentDirections.ActionAppDashboardFragmentToBidDetailsFragment action = AppDashboardFragmentDirections.actionAppDashboardFragmentToBidDetailsFragment();
+            action.setGameId(getIntent().getStringExtra(AppConstant.BID_ID));
+            navController.navigate(action);
+        } else if (null != type && !type.isEmpty()) {
+            navController.navigate(R.id.action_appDashboardFragment_to_addMoneyHistoryFragment2);
+        }
+
+        /*if (HomeScreen.getInstance().getIntent().hasExtra(AppConstant.BID_ID) && getIntent().getStringExtra(AppConstant.BID_ID) != null &&) {
+            AppDashboardFragmentDirections.ActionAppDashboardFragmentToBidDetailsFragment action = AppDashboardFragmentDirections.actionAppDashboardFragmentToBidDetailsFragment();
+            action.setGameId(getIntent().getStringExtra(AppConstant.BID_ID));
+            navController.navigate(action);
+        } else if (getIntent().hasExtra(AppConstant.NOTIFICATION_TYPE) && getIntent().getStringExtra(AppConstant.NOTIFICATION_TYPE) != null) {
+            if (getIntent().getStringExtra(AppConstant.NOTIFICATION_TYPE).equals(AppConstant.ADD_MONEY)) {
+                navController.navigate(R.id.action_appDashboardFragment_to_addMoneyHistoryFragment2);
+            }
+
+        }*/
+
+
     }
 
     @Override

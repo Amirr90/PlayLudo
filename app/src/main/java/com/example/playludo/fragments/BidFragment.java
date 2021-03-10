@@ -108,7 +108,7 @@ public class BidFragment extends Fragment implements AdapterInterface {
     @Override
     public void onItemClicked(Object obj) {
         BidModel bidModel = (BidModel) obj;
-        Log.d(TAG, "onItemClicked: "+bidModel.getBidId());
+        Log.d(TAG, "onItemClicked: " + bidModel.getBidId());
         DashboardFragmentDirections.ActionDashboardFragmentToBidDetailsFragment action = DashboardFragmentDirections.actionDashboardFragmentToBidDetailsFragment();
         action.setGameId(bidModel.getBidId());
         navController.navigate(action);

@@ -107,7 +107,7 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
                 "pas",
                 System.currentTimeMillis(),
                 true);
-       // startAppNativeAd.loadAd(new NativeAdPreferences());
+        // startAppNativeAd.loadAd(new NativeAdPreferences());
     }
 
     private void setDashboardRecData() {
@@ -135,7 +135,7 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
         updateUserData();
 
         setDashboardRecData();
-        dashboardBinding.tvFundAmount.setOnClickListener(v -> addBidData());
+        //dashboardBinding.tvFundAmount.setOnClickListener(v -> addBidData());
         dashboardBinding.btnAddMoreCredits.setOnClickListener(v -> navController.navigate(R.id.action_dashboardFragment_to_addCreditsFragment));
         dashboardBinding.btnAddBid.setOnClickListener(v -> {
             openSubmitBidDialog();
@@ -284,6 +284,7 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
                             Toast.makeText(requireActivity(), "something went wrong, try again", Toast.LENGTH_SHORT).show();
                             return;
                         }
+
                         List<DocumentChange> snapshotList = queryDocumentSnapshots.getDocumentChanges();
                         Log.d(TAG, "loadBidData: " + snapshotList.size());
                         bidModels.clear();
@@ -294,10 +295,12 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
                             if (snapshot.getType() == DocumentChange.Type.ADDED) {
                                 BidModel bidModel = snapshot.getDocument().toObject(BidModel.class);
                                 bidModel.setBidId(snapshot.getDocument().getId());
-                                bidModels.add(bidModel);
-                                if (!bidModel.isBidStatus())
-                                    active++;
-                                else paired++;
+                                if (!bidModel.getUid().equals(getUid())) {
+                                    bidModels.add(bidModel);
+                                    if (!bidModel.isBidStatus())
+                                        active++;
+                                    else paired++;
+                                }
                             }
                         bidAdapter.notifyDataSetChanged();
                         updateActiveCounter(active, paired);

@@ -49,6 +49,7 @@ public class MyBidsListFragment extends Fragment implements AdapterInterface {
     List<DocumentSnapshot> snapshots;
     public static MyBidsListFragment instance;
     NavController navController;
+    int selectedPosition = 0;
 
     public static MyBidsListFragment getInstance() {
         return instance;
@@ -80,7 +81,7 @@ public class MyBidsListFragment extends Fragment implements AdapterInterface {
         myBidsListBinding.recMyBids.addItemDecoration(new
                 DividerItemDecoration(requireActivity(),
                 DividerItemDecoration.VERTICAL));
-        loadBidsListData(0);
+        loadBidsListData(selectedPosition);
     }
 
     public void loadBidsListData(int pos) {
@@ -88,7 +89,7 @@ public class MyBidsListFragment extends Fragment implements AdapterInterface {
         if (pos == 0) {
             Utils.getFireStoreReference().collection(BID_QUERY)
                     .whereEqualTo("uid", getUid())
-                    .whereEqualTo(IS_ACTIVE, true)
+                    //.whereEqualTo(IS_ACTIVE, true)
                     .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
                     .limit(30)
                     .get()
@@ -112,7 +113,7 @@ public class MyBidsListFragment extends Fragment implements AdapterInterface {
         } else if (pos == 1) {
             Utils.getFireStoreReference().collection(BID_QUERY)
                     .whereEqualTo("bidAcceptBy", getUid())
-                    .whereEqualTo(IS_ACTIVE, true)
+                    //.whereEqualTo(IS_ACTIVE, true)
                     .orderBy(TIMESTAMP, Query.Direction.DESCENDING)
                     .limit(30)
                     .get()
@@ -146,6 +147,7 @@ public class MyBidsListFragment extends Fragment implements AdapterInterface {
 
 
     public void setMyBidRecData(int position) {
-        loadBidsListData(position);
+        selectedPosition = position;
+        loadBidsListData(selectedPosition);
     }
 }

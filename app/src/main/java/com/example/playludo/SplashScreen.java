@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.playludo.utils.AppConstant;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -15,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SplashScreen extends AppCompatActivity {
+    private static final String TAG = "SplashScreen";
+    String bidId, type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +38,33 @@ public class SplashScreen extends AppCompatActivity {
             }
         }.start();
 
+        getData();
+    }
+
+    private void getData() {
+        if (null != getIntent().getExtras()) {
+            for (String key : getIntent().getExtras().keySet()) {
+                if (key.equals("bidId")) {
+                    Log.d(TAG, "getData: BidId " + getIntent().getExtras().getString(key));
+                    bidId = getIntent().getExtras().getString(key);
+                }
+                if (key.equals("type")) {
+                    Log.d(TAG, "getData: type " + getIntent().getExtras().getString(key));
+                    type = getIntent().getExtras().getString(key);
+                }
+            }
+
+        } else Log.d(TAG, "getData: null");
     }
 
     private void checkLoginStatus() {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             login();
         } else {
-            startActivity(new Intent(SplashScreen.this, HomeScreen.class));
+            startActivity(new Intent(SplashScreen.this, HomeScreen.class)
+                    .putExtra(AppConstant.BID_ID, bidId)
+                    .putExtra(AppConstant.NOTIFICATION_TYPE, type)
+            );
             finish();
         }
     }

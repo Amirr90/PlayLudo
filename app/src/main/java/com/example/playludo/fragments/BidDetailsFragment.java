@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.playludo.R;
+import com.example.playludo.databinding.FragmentAppDashboardBinding;
 import com.example.playludo.databinding.FragmentBidDetailsBinding;
 import com.example.playludo.databinding.SubmitBidDialogViewBinding;
 import com.example.playludo.interfaces.Api;
@@ -496,7 +497,7 @@ public class BidDetailsFragment extends Fragment {
         map.put(BID_ACCEPT_TIMESTAMP, System.currentTimeMillis());
         map.put(BID_ACCEPTED_BY, getUid());
         map.put(PLAYER_TWO_UNIQUE_ID, uniqueId);
-        map.put(BID_ACCEPTER_NAME, DashboardFragment.getInstance().getUserName());
+        map.put(BID_ACCEPTER_NAME, AppDashboardFragment.getInstance().getUserName());
         map.put(GAME_STATUS, "onGoing");
         return map;
     }

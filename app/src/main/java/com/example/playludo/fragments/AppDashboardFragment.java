@@ -40,7 +40,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.startapp.sdk.ads.banner.Banner;
 import com.startapp.sdk.ads.banner.BannerListener;
@@ -60,18 +63,54 @@ import static com.example.playludo.utils.Utils.getUid;
 public class AppDashboardFragment extends Fragment {
     private static final String TAG = "AppDashboardFragment";
 
+    public static AppDashboardFragment instance;
+
+    public static AppDashboardFragment getInstance() {
+        return instance;
+    }
+
     public static final String ADD_NEW_BID_TOPIC = "AddNewBidTopic";
     FragmentAppDashboardBinding binding;
     NavController navController;
     AlertDialog optionDialog;
+    String userName;
+//    private StartAppNativeAd startAppNativeAd = new StartAppNativeAd(requireActivity());
+
+    public String getUserName() {
+        return userName == null ? FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() : userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAppDashboardBinding.inflate(getLayoutInflater());
+        instance = this;
+        getUserData();
         initStartAdNetwork();
         initAds();
         return binding.getRoot();
+    }
+
+    private void getUserData() {
+        Utils.getFireStoreReference().collection(USERS_QUERY).document(getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (e == null && null != documentSnapshot) {
+                    User user = documentSnapshot.toObject(User.class);
+                    if (null != user) {
+                        setUserName(user.getName());
+
+                    } else
+                        Toast.makeText(requireActivity(), "User not found !!", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(requireActivity(), "something went wrong !!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initStartAdNetwork() {
@@ -80,6 +119,7 @@ public class AppDashboardFragment extends Fragment {
                 System.currentTimeMillis(),
                 true);
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

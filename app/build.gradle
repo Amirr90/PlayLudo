@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.playludo"
-        minSdkVersion 20
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -83,6 +83,8 @@ dependencies {
 
 
     implementation 'com.startapp:inapp-sdk:4.8.+'
+
+    implementation 'com.google.firebase:firebase-messaging-directboot:20.2.0'
 
 
 
