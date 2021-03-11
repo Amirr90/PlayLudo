@@ -159,18 +159,30 @@ public class AddCreditsFragment extends Fragment {
 
 
         genderViewBinding.textView47.setText("Enter Amount to withdraw (minimum amount is ₹200)");
+        genderViewBinding.etGameId.setVisibility(View.VISIBLE);
+        genderViewBinding.etGameId.setHint("Enter PayTm mobile number");
         genderViewBinding.btnOk.setOnClickListener(v -> {
             String amount = genderViewBinding.etAmount.getText().toString().trim();
-            if (TextUtils.isDigitsOnly(amount) && !TextUtils.isEmpty(amount)) {
-
-                if (Long.parseLong(amount) < 50) {
-                    genderViewBinding.etAmount.setError("minimum withdrawal amount is ₹200");
-                    return;
-                }
+            String number = genderViewBinding.etGameId.getText().toString().trim();
+            if (!TextUtils.isDigitsOnly(number) || TextUtils.isEmpty(number) || number.length() < 10) {
+                Toast.makeText(requireActivity(), "Enter Valid Mobile number", Toast.LENGTH_SHORT).show();
+            } else if (!TextUtils.isDigitsOnly(amount) || TextUtils.isEmpty(amount)) {
+                Toast.makeText(requireActivity(), "Enter Valid amount number", Toast.LENGTH_SHORT).show();
+            } else if (Long.parseLong(amount) > 10000) {
+                genderViewBinding.etAmount.setError("maximum withdrawal amount is ₹10,000");
+            } else if (Long.parseLong(amount) < 50) {
+                genderViewBinding.etAmount.setError("minimum withdrawal amount is ₹50");
+            } else {
                 optionDialog.dismiss();
+                new AlertDialog.Builder(requireActivity()).setTitle("Your money Rs " + amount + " will be sent to " + number + " PayTm mobile number.")
+                        .setNegativeButton("No", (dialog, which) -> dialog.dismiss()).setPositiveButton("Yes, Proceed ", (dialog, which) -> {
+                    dialog.dismiss();
+                    createWithdrawAmountRequest(amount, number);
+                }).show();
 
-                createWithdrawAmountRequest(amount);
+
             }
+
         });
 
         genderViewBinding.btnCancel.setOnClickListener(v -> optionDialog.dismiss());
@@ -183,8 +195,9 @@ public class AddCreditsFragment extends Fragment {
 
     }
 
-    private void createWithdrawAmountRequest(String amount) {
+    private void createWithdrawAmountRequest(String amount, String number) {
         AppUtils.showRequestDialog(requireActivity(), false);
+        String walletAmountBeforeReq = addCreditsBinding.tvAmount.getText().toString();
         new WithdrawAmount(requireActivity(), new WithdrawInterface() {
             @Override
             public void onSuccess(Object o) {
@@ -198,7 +211,7 @@ public class AddCreditsFragment extends Fragment {
                 AppUtils.hideDialog();
                 Toast.makeText(requireActivity(), (String) o, Toast.LENGTH_SHORT).show();
             }
-        }).start(amount);
+        }).start(amount, number, walletAmountBeforeReq);
 
     }
 

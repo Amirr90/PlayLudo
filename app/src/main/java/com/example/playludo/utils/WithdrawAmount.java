@@ -11,6 +11,7 @@ import com.example.playludo.models.AddCredits;
 import com.example.playludo.models.TransactionModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -32,6 +33,9 @@ public class WithdrawAmount {
     public static final String TYPE_WITHDRAW = "withdraw";
     Activity activity;
     WithdrawInterface withdrawInterface;
+    String number;
+    String walletAmountBeforeReq;
+    String walletAmountAfterReq;
 
 
     String tId = String.valueOf(System.currentTimeMillis());
@@ -41,7 +45,9 @@ public class WithdrawAmount {
         this.withdrawInterface = withdrawInterface;
     }
 
-    public void start(String amount) {
+    public void start(String amount, String number, String walletAmountBeforeReq) {
+        this.number = number;
+        this.walletAmountBeforeReq = walletAmountBeforeReq;
         checkAmount(amount);
     }
 
@@ -96,6 +102,9 @@ public class WithdrawAmount {
         addCredits.setUid(getUid());
         addCredits.setStatus(PENDING);
         addCredits.settId(tId);
+        addCredits.setPayTmNumber(number);
+        addCredits.setWalletAmountBeforeReq(walletAmountBeforeReq);
+        addCredits.setUserMobileNumber(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
         addCredits.setAmount(String.valueOf(credits));
         return addCredits;
     }

@@ -7,6 +7,37 @@ public class AddCredits {
     String uid;
     String status;
     String name;
+    String payTmNumber;
+    String walletAmountBeforeReq;
+    
+
+    public String getWalletAmountBeforeReq() {
+        return walletAmountBeforeReq;
+    }
+
+    public void setWalletAmountBeforeReq(String walletAmountBeforeReq) {
+        this.walletAmountBeforeReq = walletAmountBeforeReq;
+    }
+
+    public String getPayTmNumber() {
+        return payTmNumber;
+    }
+
+    public void setPayTmNumber(String payTmNumber) {
+        this.payTmNumber = payTmNumber;
+    }
+
+    public String getUserMobileNumber() {
+        return userMobileNumber;
+    }
+
+    public void setUserMobileNumber(String userMobileNumber) {
+        this.userMobileNumber = userMobileNumber;
+    }
+
+    String userMobileNumber;
+
+
 
     public String getName() {
         return name;

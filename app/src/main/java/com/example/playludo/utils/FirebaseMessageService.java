@@ -41,7 +41,6 @@ public class FirebaseMessageService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "onMessageReceivedData: " + remoteMessage.getData());
-        Log.d(TAG, "onMessageReceivedNotification: " + remoteMessage.getNotification().getBody());
 
         try {
             if (remoteMessage.getData() != null)
@@ -104,7 +103,7 @@ public class FirebaseMessageService extends FirebaseMessagingService {
 
                 playNotificationSound();
                 NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.mipmap.ic_launcher_foreground)
                         .setContentTitle(title)
                         .setContentText(msg)
                         .setAutoCancel(true)

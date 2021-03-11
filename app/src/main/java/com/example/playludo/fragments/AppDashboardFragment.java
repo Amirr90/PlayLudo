@@ -76,6 +76,7 @@ public class AppDashboardFragment extends Fragment {
     String userName;
 
     public String getUserName() {
+
         return userName == null ? FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() : userName;
     }
 
@@ -161,7 +162,7 @@ public class AppDashboardFragment extends Fragment {
     private void setBannerAdd() {
         AdRequest adRequest = new AdRequest.Builder().build();
         binding.adView.loadAd(adRequest);
-        /*binding.adView2.loadAd(adRequest);
+       /* binding.adView2.loadAd(adRequest);
         binding.adView3.loadAd(adRequest);
         binding.adView4.loadAd(adRequest);
         binding.adView5.loadAd(adRequest);
