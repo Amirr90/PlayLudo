@@ -107,7 +107,8 @@ public class PoolGameListFragment extends Fragment {
 
         navController = Navigation.findNavController(view);
         binding.recPoolGame.setAdapter(new HomeAdapter(getHomeList()));
-        setBannerAdd();
+
+        //setBannerAdd();
 
     }
 
@@ -147,8 +148,25 @@ public class PoolGameListFragment extends Fragment {
                     bundle.putString(GAME_TYPE, homeScreenModel.getTitle());
                     bundle.putInt(GAME_IMAGE, homeScreenModel.getImage());
                     navController.navigate(R.id.action_poolGameListFragment_to_dashboardFragment, bundle);
+                } else if (position == 1) {
+                    showDialog("You need to share the video of shot on black.", homeScreenModel);
+                } else if (position == 2) {
+                    showDialog("You need to share the video whole game", homeScreenModel);
+                } else if (position == 3) {
+                    showDialog("You need to share the video whole game", homeScreenModel);
                 } else showComingSoonDialog();
             });
+        }
+
+        private void showDialog(String s, HomeScreenModel homeScreenModel) {
+            new AlertDialog.Builder(requireActivity()).setMessage(s).setPositiveButton("OK", (dialog, which) -> {
+                Bundle bundle = new Bundle();
+                bundle.putString(GAME_TYPE, homeScreenModel.getTitle());
+                bundle.putInt(GAME_IMAGE, homeScreenModel.getImage());
+                navController.navigate(R.id.action_poolGameListFragment_to_dashboardFragment, bundle);
+            }).setNeutralButton("Cancel", (dialog, which) -> {
+                dialog.dismiss();
+            }).show();
         }
 
         @Override

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -53,6 +54,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -131,7 +133,13 @@ public class BidDetailsFragment extends Fragment {
 
         });
         bidDetailsBinding.btnWin.setOnClickListener(v -> {
-            selectImage();
+            if (bidDetailsBinding.textView15.getText().equals(AppConstant.ALL_INDIRECT) || bidDetailsBinding.textView15.getText().equals(AppConstant.ALL_INDIRECT_BLACK_DOUBLE))
+                showAlertDialogForUplodeVideo("share video of whole  game on our whatsApp number !!");
+            else if (bidDetailsBinding.textView15.getText().equals(AppConstant.VENICE_RULE))
+                showAlertDialogForUplodeVideo("share video of last shoot on black on our whatsApp number !!");
+
+            else
+                selectImage();
         });
 
         bidDetailsBinding.btnLoss.setOnClickListener(v ->
@@ -150,6 +158,10 @@ public class BidDetailsFragment extends Fragment {
             AppUtils.showRequestDialog(requireActivity());
             sendShareContact();
         });
+    }
+
+    private void showAlertDialogForUplodeVideo(String s) {
+        new AlertDialog.Builder(requireActivity()).setTitle(s).setPositiveButton("OK", (dialog, which) -> dialog.dismiss()).show();
     }
 
     private void showDialogToEnterRoomCode() {
@@ -378,7 +390,9 @@ public class BidDetailsFragment extends Fragment {
     }
 
     private void showAlertDialog(String amount) {
-        new AlertDialog.Builder(requireActivity()).setTitle("Do You want to accept Bid of " + amount + " ??")
+        new AlertDialog.Builder(requireActivity())
+                .setTitle("Pls verify the before accepting the Bid")
+                .setMessage("Do You want to accept Bid of " + amount + " ??")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     dialog.dismiss();
                     if (bidModel.getGameName().equals(AppConstant.SIMPLE_JAKARTHA)) {
@@ -516,6 +530,7 @@ public class BidDetailsFragment extends Fragment {
                     bidDetailsBinding.tvBidingAmount.setText(AppUtils.getCurrencyFormat(bidModel.getBidAmount()));
                     bidDetailsBinding.tvBidingTime.setText(AppUtils.getTimeAgo(bidModel.getTimestamp()));
                     bidDetailsBinding.btnAccept.setEnabled(!bidModel.isBidStatus());
+                    setGameWarning(bidModel);
 
 
                     if (bidModel.getUid().equals(getUid())) {
@@ -563,6 +578,25 @@ public class BidDetailsFragment extends Fragment {
             } else {
 
                 Toast.makeText(requireActivity(), "Failed to get Bid Details, try again", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setGameWarning(BidModel bidModel) {
+        getFireStoreReference().collection(AppConstant.GAME_WARNING).document(AppConstant.GAME_MSG).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (e == null) {
+                    String msg;
+                    if (bidModel.getGameName().equals(AppConstant.VENICE_RULE))
+                        msg = documentSnapshot.getString(AppConstant.VENICE_RULE_MSG);
+                    else if (bidModel.getGameName().equals(AppConstant.ALL_INDIRECT))
+                        msg = documentSnapshot.getString(AppConstant.ALL_INDIRECT_MSG);
+                    else if (bidModel.getGameName().equals(AppConstant.ALL_INDIRECT_BLACK_DOUBLE))
+                        msg = documentSnapshot.getString(AppConstant.ALL_INDIRECT_BLACK_DOUBLE_MSG);
+                    else msg = "";
+                    bidDetailsBinding.textView30.setText(msg);
+                }
             }
         });
     }

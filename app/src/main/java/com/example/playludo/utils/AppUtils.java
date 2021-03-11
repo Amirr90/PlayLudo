@@ -32,8 +32,14 @@ public class AppUtils {
         if (gameType.equalsIgnoreCase(AppConstant.LUDO_KING))
             return "Enter Room  Code";
         else if (gameType.equalsIgnoreCase(AppConstant.SIMPLE_JAKARTHA))
-            return "Enter 8 Ball Pool Unique Id Here";
-        else return "";
+            return "Enter 8Ball Pool Unique Id";
+        else if (gameType.equalsIgnoreCase(AppConstant.VENICE_RULE))
+            return "Enter 8Ball Pool Unique Id";
+        else if (gameType.equalsIgnoreCase(AppConstant.ALL_INDIRECT))
+            return "Enter 8Ball Pool Unique Id";
+        else if (gameType.equalsIgnoreCase(AppConstant.ALL_INDIRECT_BLACK_DOUBLE))
+            return "Enter 8Ball Pool Unique Id";
+        else return "Enter Game Id";
 
     }
 

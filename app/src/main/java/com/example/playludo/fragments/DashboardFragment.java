@@ -254,7 +254,11 @@ public class DashboardFragment extends Fragment implements BidInterface, Adapter
     @Override
     public void onBidPlaceSuccessFully(Object obj) {
         AppUtils.hideDialog();
+
         Toast.makeText(requireActivity(), "Bid Placed Successfully !!", Toast.LENGTH_SHORT).show();
+        DashboardFragmentDirections.ActionDashboardFragmentToBidDetailsFragment action = DashboardFragmentDirections.actionDashboardFragmentToBidDetailsFragment();
+        action.setGameId((String) obj);
+        navController.navigate(action);
     }
 
     @Override

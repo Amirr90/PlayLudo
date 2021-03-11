@@ -23,11 +23,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <ScrollView
+            android:id="@+id/scrollView2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="32dp"
-            app:layout_constraintBottom_toTopOf="@+id/btnAccept"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView30"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -362,27 +364,57 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         </ScrollView>
 
-        <Button
-            android:id="@+id/btnAccept"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="@{bidModel.gameStatus.equals(AppConstant.CLOSED)?View.GONE:View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/btnAccept"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@{bidModel.bidStatus?Color.parseColor(`#ff3300`):Color.parseColor(`#00e600`)}"
+                android:text="@{bidModel.bidStatus?`Accepted`:`Accecpt`}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btnRequestContact"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@{bidModel.contactDetails==null?Color.parseColor(`#00e600`):Color.parseColor(`#ff3300`)}"
+                android:text="@{bidModel.contactDetails==null?`Share Contact Details`:`Shared Contact Details`}"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/textView30"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@{bidModel.bidStatus?Color.parseColor(`#ff3300`):Color.parseColor(`#00e600`)}"
-            android:text="@{bidModel.bidStatus?`Accepted`:`Accecpt`}"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="You need to share the video of last Shot "
+            android:textColor="@android:color/holo_red_dark"
+            android:visibility="@{bidModel.gameStatus.equals(AppConstant.CLOSED)?View.GONE:View.VISIBLE}"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/btnRequestContact"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@{bidModel.contactDetails==null?Color.parseColor(`#00e600`):Color.parseColor(`#ff3300`)}"
-            android:text="@{bidModel.contactDetails==null?`Share Contact Details`:`Shared Contact Details`}"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

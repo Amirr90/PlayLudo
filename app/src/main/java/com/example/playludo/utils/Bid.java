@@ -105,7 +105,7 @@ public class Bid extends AddCredits {
 
         // Commit the batch
         batch.commit().addOnSuccessListener(task -> {
-            bidInterface.onBidPlaceSuccessFully(task);
+            bidInterface.onBidPlaceSuccessFully(bidId);
             Log.d(TAG, "onComplete: " + task);
 
         }).addOnFailureListener(e -> {

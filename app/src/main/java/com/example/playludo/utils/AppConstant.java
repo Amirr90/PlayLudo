@@ -37,4 +37,9 @@ public class AppConstant {
     public static final String ADD_MONEY = "addMoney";
     public static final String BID_ID = "BidId";
     public static final String NOTIFICATION_TYPE = "notificationType";
+    public static final String GAME_WARNING = "gameWarning";
+    public static final String GAME_MSG = "gameMsg";
+    public static final String VENICE_RULE_MSG = "veniceRuleMsg";
+    public static final String ALL_INDIRECT_MSG = "allIndirectMsg";
+    public static final String ALL_INDIRECT_BLACK_DOUBLE_MSG = "allIndirectBlackMsg";
 }
