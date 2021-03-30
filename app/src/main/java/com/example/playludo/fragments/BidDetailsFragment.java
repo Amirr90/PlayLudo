@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -26,10 +25,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.playludo.R;
-import com.example.playludo.databinding.FragmentAppDashboardBinding;
 import com.example.playludo.databinding.FragmentBidDetailsBinding;
 import com.example.playludo.databinding.SubmitBidDialogViewBinding;
-import com.example.playludo.interfaces.Api;
 import com.example.playludo.interfaces.ApiCallbackInterface;
 import com.example.playludo.models.BidModel;
 import com.example.playludo.models.TransactionModel;
@@ -47,14 +44,12 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -390,8 +385,18 @@ public class BidDetailsFragment extends Fragment {
     }
 
     private void showAlertDialog(String amount) {
+        String textInHindi = "कृपया बेट एक्सेप्ट करने से पहले  " + getTitle() + " चेक कर लें! गलत हो तो request new id पे क्लिक करें !!";
         new AlertDialog.Builder(requireActivity())
-                .setTitle("Pls verify the before accepting the Bid")
+                .setMessage("Please verify the " + getTitle() + " before accepting the Bid\n\n" + textInHindi)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    dialog.dismiss();
+                    showAcceptBidDialog(amount);
+                }).setNegativeButton("Dismiss", (dialog, which) -> dialog.dismiss()).show();
+
+    }
+
+    private void showAcceptBidDialog(String amount) {
+        new AlertDialog.Builder(requireActivity())
                 .setMessage("Do You want to accept Bid of " + amount + " ??")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     dialog.dismiss();
@@ -400,6 +405,15 @@ public class BidDetailsFragment extends Fragment {
                     } else acceptBid("");
 
                 }).setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
+    }
+
+    private String getTitle() {
+        if (bidModel.getGameName().equals(AppConstant.SIMPLE_JAKARTHA))
+            return "'Unique id'";
+        else if (bidModel.getGameName().equals(AppConstant.LUDO_KING))
+            return "'room code'";
+        else return "";
+
 
     }
 

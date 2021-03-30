@@ -22,24 +22,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.playludo.R;
 import com.example.playludo.databinding.FragmentAppDashboardBinding;
 import com.example.playludo.databinding.HomeViewBinding;
-import com.example.playludo.databinding.SubmitBidDialogViewBinding;
 import com.example.playludo.databinding.SubmitNameDialogViewBinding;
 import com.example.playludo.models.HomeScreenModel;
 import com.example.playludo.models.User;
 import com.example.playludo.utils.AppUtils;
-import com.example.playludo.utils.Bid;
 import com.example.playludo.utils.Utils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -57,7 +49,11 @@ import java.util.Objects;
 
 import static com.example.playludo.fragments.AddCreditsFragment.USERS_QUERY;
 import static com.example.playludo.fragments.BidFragment.GAME_IMAGE;
-import static com.example.playludo.utils.AppConstant.*;
+import static com.example.playludo.utils.AppConstant.FREE_FIRE;
+import static com.example.playludo.utils.AppConstant.GAME_TYPE;
+import static com.example.playludo.utils.AppConstant.LUDO_KING;
+import static com.example.playludo.utils.AppConstant.POLL_8_BALL;
+import static com.example.playludo.utils.AppConstant.PUB_G;
 import static com.example.playludo.utils.Utils.getUid;
 
 public class AppDashboardFragment extends Fragment {
@@ -128,7 +124,7 @@ public class AppDashboardFragment extends Fragment {
         binding.homeRec.setAdapter(new HomeAdapter(getHomeList()));
         checkForUsername();
         subscribeToNewBidsTopic();
-        //setBannerAdd();
+        setBannerAdd();
         setStartNetworkBannerAd();
 
 

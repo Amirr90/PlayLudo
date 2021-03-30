@@ -108,7 +108,7 @@ public class PoolGameListFragment extends Fragment {
         navController = Navigation.findNavController(view);
         binding.recPoolGame.setAdapter(new HomeAdapter(getHomeList()));
 
-        //setBannerAdd();
+        setBannerAdd();
 
     }
 

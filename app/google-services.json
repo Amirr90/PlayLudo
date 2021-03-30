@@ -7,12 +7,73 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:1090859062327:android:fb8545f49160f0478c1bb2",
+        "android_client_info": {
+          "package_name": "com.example.adminapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1090859062327-6i3ere7s6m1dr0qspu0h5ck7qpeco1kh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.adminapp",
+            "certificate_hash": "b8bd74315ae1bbe5466dbf109d989f90a93ee740"
+          }
+        },
+        {
+          "client_id": "1090859062327-86e8s2grah8cje3efi26436qldvn761t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.adminapp",
+            "certificate_hash": "d5442f9938db4c279fdf6fefaa644aeabec8da52"
+          }
+        },
+        {
+          "client_id": "1090859062327-fdsc9oaph2uabukoq52r3ogu6p13ieso.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9KxwxMJgOS9k6-MUn5vWkT8PkHSLAhY4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1090859062327-fdsc9oaph2uabukoq52r3ogu6p13ieso.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:1090859062327:android:81af17ccb698fbb78c1bb2",
         "android_client_info": {
           "package_name": "com.example.playludo"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1090859062327-1cug4n2vpemsnkf2p6jco3f83hofgat7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.playludo",
+            "certificate_hash": "b8bd74315ae1bbe5466dbf109d989f90a93ee740"
+          }
+        },
+        {
+          "client_id": "1090859062327-qqgcgrpitb3jhv5e71cm4sbngsddps9k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.playludo",
+            "certificate_hash": "d5442f9938db4c279fdf6fefaa644aeabec8da52"
+          }
+        },
         {
           "client_id": "1090859062327-fdsc9oaph2uabukoq52r3ogu6p13ieso.apps.googleusercontent.com",
           "client_type": 3
